@@ -5,10 +5,10 @@
   "sdkVersion": "14.0.0",
   "version": "1.0.0",
   "orientation": "portrait",
-  "primaryColor": "#cccccc",
-  "icon": "https://s3.amazonaws.com/exp-icon-assets/ExpoEmptyManifest_192.png",
+  "primaryColor": "#FF69B4",
+  "icon": "USTFetch1.png",
   "loading": {
-    "icon": "https://s3.amazonaws.com/exp-icon-assets/ExpoEmptyManifest_192.png",
+    "icon": "USTFetch.png",
     "hideExponentText": false
   },
   "packagerOpts": {
