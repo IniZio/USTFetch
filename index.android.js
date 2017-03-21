@@ -13,6 +13,7 @@ import {
   DrawerLayoutAndroid,
   View
 } from 'react-native';
+import Expo from 'expo';
 import { 
   Toolbar,
   Card,
@@ -59,4 +60,5 @@ export default class fetch extends Component {
 const styles = StyleSheet.create({
 });
 
-AppRegistry.registerComponent('fetch', () => fetch);
+// AppRegistry.registerComponent('fetch', () => fetch);
+Expo.registerRootComponent(fetch)
