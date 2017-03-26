@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 import {
   View,
-  Text,
   Image,
   TouchableWithoutFeedback
 } from 'react-native'
@@ -11,18 +10,22 @@ import {
   StyleProvider,
   Form,
   Item,
-  Label,
+  Label, Text,
   Input,
   Button,
   Container
 } from 'native-base'
 
-export default class AuthForm extends Component {
+import variables from '../theme/variables/platform'
+
+export default class LoginForm extends Component {
+  static navigationOptions = {
+    header: { visible: false }
+  }
+
   render = () => (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
-      <Container theme={{ brandPrimary: '#FF69B4' }}
-        contentContainerStyle={{flex: 1}} style={{padding: 60}}
-      >
+      <Container contentContainerStyle={{flex: 1}} style={{padding: 60}}>
         <Grid style={{alignItems: 'center'}}>
           <Col size={9}>
             <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 40 }}>
@@ -30,7 +33,7 @@ export default class AuthForm extends Component {
             </View>
             <Form>
               <Item>
-                <Input placeholder="ITSC"/>
+                <Input placeholder="ITSC" autoCapitalize="none" autoCorrect={false} autoFocus/>
               </Item>
               <Item>
                 <Input placeholder="Password" secureTextEntry />
@@ -43,7 +46,7 @@ export default class AuthForm extends Component {
                 </Col>
                 <Col>
                   <Button primary onPressOut={() => this.props.onLogin(true)}>
-                    <Text style={{color: '#fff'}}>Login/Signup</Text>
+                    <Text>Login/Signup</Text>
                   </Button>
                 </Col>
               </Grid>
