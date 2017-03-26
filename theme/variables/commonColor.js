@@ -22,7 +22,7 @@ export default {
   badgePadding: (platform === 'ios') ? 3 : 0,
 
     // Button
-  btnFontFamily: (platform === 'ios') ? 'System' : 'Roboto_medium',
+  btnFontFamily: (platform === 'ios') ? 'System' : 'Roboto',
   btnDisabledBg: '#b5b5b5',
   btnDisabledClr: '#f1f1f1',
 
@@ -159,7 +159,7 @@ export default {
 
     // Header
   toolbarBtnColor: '#fff',
-  toolbarDefaultBg: '#2874F0',
+  toolbarDefaultBg: '#fff',
   toolbarHeight: (platform === 'ios') ? 64 : 56,
   toolbarIconSize: (platform === 'ios') ? 20 : 22,
   toolbarSearchIconSize: (platform === 'ios') ? 20 : 23,
@@ -265,7 +265,7 @@ export default {
 
 
     // Title
-  titleFontfamily: (platform === 'ios') ? 'System' : 'Roboto_medium',
+  titleFontfamily: (platform === 'ios') ? 'System' : 'Roboto',
   titleFontSize: (platform === 'ios') ? 17 : 19,
   subTitleFontSize: (platform === 'ios') ? 12 : 14,
   subtitleColor: '#FFF',

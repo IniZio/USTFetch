@@ -1,29 +1,39 @@
-import React, {Component} from 'react';
-import Expo from 'expo';
-import {StyleSheet, View, Image} from 'react-native';
-import {
-  StyleProvider,
-  Container, Header, Content, 
-  Card, CardItem,
-  Button,
-  Left, Right,
-  Body,
-  Text,
-  Icon,
-  Title,
-  Tab, Tabs
-} from 'native-base';
-import {ThemeProvider, Avatar} from 'react-native-material-ui';
-import {TabBar} from 'react-native-tab-view'
+import React, {Component} from 'react'
+import Expo from 'expo'
+import { StyleProvider, Container } from 'native-base'
+import { ThemeProvider } from 'react-native-material-ui';
 
 import getTheme from './theme/components'
+import Router from './router'
 
-import MissionBoard from './Components/MissionBoard'
-import AuthForm from './Components/AuthForm.js'
+import LoginForm from './Components/LoginForm'
 
-export default class fetch extends Component {
+function cacheImages(images) {
+  return images.map(image => {
+    if (typeof image === 'string') {
+      return Image.prefetch(image);
+    } else {
+      return Expo.Asset.fromModule(image).downloadAsync();
+    }
+  });
+}
+
+async function cacheAssets () {
+    const imageAssets = await cacheImages([
+      require('./USTFetch.png'),
+      require('./USTFetch1.png')
+    ])
+}
+
+export default class Fetch extends Component {
   state = {
-    isLoginned: true
+    appReady: false,
+    isLoginned: true,
+  }
+  componentWillMount () {
+    cacheAssets().then(() => {
+      this.setState({ appReady: true })
+    })
   }
 
   setUserState = loginState => {
@@ -35,43 +45,15 @@ export default class fetch extends Component {
   render = () => (
     <StyleProvider style={getTheme()}>
     <ThemeProvider>
-        {
-          this.state.isLoginned ?
-            <Container>
-              <Header hasTabs>
-                <Left>
-                  <Image style={{ maxHeight: 40 }} resizeMethod="scale" source={require('./USTFetch1.png')}/>
-                </Left>
-                <Body>
-                </Body>
-                <Right>
-                  <Button transparent>
-                    <Icon name="heart"/>
-                  </Button>
-                  <Button transparent>
-                    <Icon name="people"/>
-                  </Button>
-                  <Button transparent>
-                    <Icon name="search"/>
-                  </Button>
-                </Right>
-              </Header>
-              <Tabs>
-                <Tab heading="Missions">
-                  <MissionBoard />
-                </Tab>
-                <Tab heading="Messages"></Tab>
-                <Tab heading="Me"></Tab>
-              </Tabs>
-            </Container>:
-            <AuthForm onLogin={this.setUserState}/>
-        }
+      <Container>{
+        this.state.appReady ?
+          (this.state.isLoginned ? <Router /> : <LoginForm onLogin={this.setUserState} />) :
+          // TODO make loading screen when assets not ready
+          null
+      }</Container>
     </ThemeProvider>
     </StyleProvider>
   )
 }
 
-const styles = StyleSheet.create({});
-
-// AppRegistry.registerComponent('fetch', () => fetch);
-Expo.registerRootComponent(fetch)
+Expo.registerRootComponent(Fetch)

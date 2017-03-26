@@ -13,14 +13,18 @@
     "native-base": "^2.0.13",
     "react": "~15.4.0",
     "react-native": "github:exponent/react-native#sdk-14.0.0",
+    "react-native-action-button": "^2.6.4",
     "react-native-dismiss-keyboard": "^1.0.0",
     "react-native-easy-grid": "^0.1.8",
     "react-native-material-ui": "^1.8.0",
     "react-native-tab-view": "^0.0.57",
     "react-native-vector-icons": "^4.0.0",
+    "react-navigation": "^1.0.0-beta.7",
+    "react-navigation-native-base": "^1.0.0-beta.7.1",
     "react-router-native": "^4.0.0"
   },
   "devDependencies": {
+    "appr": "^1.0.1",
     "babel-jest": "19.0.0",
     "babel-plugin-transform-class-properties": "^6.23.0",
     "babel-preset-react-native": "1.9.1",

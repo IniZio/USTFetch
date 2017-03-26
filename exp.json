@@ -5,6 +5,12 @@
   "sdkVersion": "14.0.0",
   "version": "1.0.0",
   "orientation": "portrait",
+  "ios": {
+     "bundleIdentifier": "org.ustfetch.fetch"
+   },
+   "android": {
+     "package": "org.ustfetch.fetch"
+   },
   "primaryColor": "#FF69B4",
   "icon": "USTFetch1.png",
   "loading": {
