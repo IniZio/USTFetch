@@ -22,7 +22,7 @@ export default {
   badgePadding: (platform === 'ios') ? 3 : 0,
 
     // Button
-  btnFontFamily: (platform === 'ios') ? 'System' : 'Roboto_medium',
+  btnFontFamily: (platform === 'ios') ? 'System' : 'Roboto',
   btnDisabledBg: '#b5b5b5',
   btnDisabledClr: '#f1f1f1',
 
@@ -112,7 +112,7 @@ export default {
 
 
       // Color
-  brandPrimary: (platform === 'ios') ? '#FF69B4' : '#FF69B4',
+  brandPrimary: (platform === 'ios') ? '#ff69B4' : '#ff69B4',
   brandInfo: '#62B1F6',
   brandSuccess: '#5cb85c',
   brandDanger: '#d9534f',
@@ -149,17 +149,17 @@ export default {
   tabActiveBgColor: (platform === 'ios') ? '#cde1f9' : '#3F51B5',
 
     // Tab
-  tabDefaultBg: (platform === 'ios') ? '#F8F8F8' : '#3F51B5',
-  topTabBarTextColor: (platform === 'ios') ? '#6b6b6b' : '#b3c7f9',
-  topTabBarActiveTextColor: (platform === 'ios') ? '#007aff' : '#fff',
+  tabDefaultBg: (platform === 'ios') ? '#F8F8F8' : '#fff',
+  topTabBarTextColor: (platform === 'ios') ? '#6b6b6b' : '#acacac',
+  topTabBarActiveTextColor: (platform === 'ios') ? '#757575' : '#757575',
   topTabActiveBgColor: (platform === 'ios') ? '#cde1f9' : undefined,
   topTabBarBorderColor: (platform === 'ios') ? '#a7a6ab' : '#fff',
-  topTabBarActiveBorderColor: (platform === 'ios') ? '#007aff' : '#fff',
+  topTabBarActiveBorderColor: (platform === 'ios') ? '#ff69B4' : '#ff69B4',
 
 
     // Header
-  toolbarBtnColor: (platform === 'ios') ? '#007aff' : '#fff',
-  toolbarDefaultBg: (platform === 'ios') ? '#F8F8F8' : '#3F51B5',
+  toolbarBtnColor: (platform === 'ios') ? '#757575' : '#757575',
+  toolbarDefaultBg: (platform === 'ios') ? '#F8F8F8' : '#fff',
   toolbarHeight: (platform === 'ios') ? 64 : 56,
   toolbarIconSize: (platform === 'ios') ? 20 : 22,
   toolbarSearchIconSize: (platform === 'ios') ? 20 : 23,
@@ -265,7 +265,7 @@ export default {
 
 
     // Title
-  titleFontfamily: (platform === 'ios') ? 'System' : 'Roboto_medium',
+  titleFontfamily: (platform === 'ios') ? 'System' : 'Roboto',
   titleFontSize: (platform === 'ios') ? 17 : 19,
   subTitleFontSize: (platform === 'ios') ? 12 : 14,
   subtitleColor: (platform === 'ios') ? '#8e8e93' : '#FFF',
