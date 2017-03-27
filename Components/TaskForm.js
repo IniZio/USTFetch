@@ -30,10 +30,6 @@ export default class TaskForm extends Component {
       this.setState({
         bidStatus: 'ACCEPTED'
       })
-
-      // this.setState({
-      //   requestModalVisible: false
-      // })
     }, 2000)
   }
 
@@ -44,22 +40,27 @@ export default class TaskForm extends Component {
         transparent={true}
         visible={this.state.requestModalVisible}
       >
-        <Container style={{ backgroundColor: 'rgba(52, 52, 52, 0.4)', paddingHorizontal: 50, paddingVertical: 100 }}>
+        <Container style={{ backgroundColor: 'rgba(52, 52, 52, 0.4)', paddingHorizontal: 50, paddingVertical: 200 }}>
           <Card>
-            <CardItem style={{ maxHeight: 100 }}>
-              <Body>{
+            <CardItem>
+              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>{
                 this.state.bidStatus === 'PENDING' ?
                   <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 70, marginHorizontal: 30 }}>
                     <Text>Waiting for Fetcher response</Text>
                     <Spinner />
                   </View> :
-                  <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>Mission {this.state.bidStatus} !</Text>
-                    <Button primary block>
+                  <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 70, marginHorizontal: 30 }}>
+                    <View><Text>Mission {this.state.bidStatus} !</Text></View>
+                    <Button primary block onPress={() => {
+                      this.setState({
+                        requestModalVisible: false
+                      })
+                      this.props.navigation.navigate('ChatRoom')
+                      }}>
                       <Icon name="arrow-forward" />
                     </Button>
                   </View>
-              }</Body>
+              }</View>
             </CardItem>
           </Card>
         </Container>
