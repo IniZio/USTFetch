@@ -21,7 +21,8 @@ function cacheImages(images) {
 async function cacheAssets () {
     const imageAssets = await cacheImages([
       require('./USTFetch.png'),
-      require('./USTFetch1.png')
+      require('./USTFetch1.png'),
+      require('./mapSample.png')
     ])
 }
 
