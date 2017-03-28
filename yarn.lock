@@ -1160,7 +1160,7 @@ babel-preset-react-native@1.9.1, babel-preset-react-native@^1.5.6, babel-preset-
     babel-plugin-transform-regenerator "^6.5.0"
     react-transform-hmr "^1.0.4"
 
-babel-preset-react@^6.16.0:
+babel-preset-react@^6.16.0, babel-preset-react@^6.3.13:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-preset-react/-/babel-preset-react-6.23.0.tgz#eb7cee4de98a3f94502c28565332da9819455195"
   dependencies:
@@ -1304,7 +1304,7 @@ bluebird@^3.4.7:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
 
-blueimp-md5@^2.5.0:
+blueimp-md5@^2.3, blueimp-md5@^2.5.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/blueimp-md5/-/blueimp-md5-2.7.0.tgz#7f518e0dd70467fefe28ecba398916092f2a02a9"
 
@@ -3647,11 +3647,11 @@ lodash@^3.3.1, lodash@^3.5.0:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
-lodash@^4.0.0, lodash@^4.11.1, lodash@~4.11.1:
+lodash@^4.0.0, lodash@^4.10.1, lodash@^4.11.1, lodash@~4.11.1:
   version "4.11.2"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.11.2.tgz#d6b4338b110a58e21dae5cebcfdbbfd2bc4cdb3b"
 
-lodash@^4.10.1, lodash@^4.14.0, lodash@^4.14.1, lodash@^4.15.0, lodash@^4.16.6, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1, lodash@~4.17.2:
+lodash@^4.14.0, lodash@^4.14.1, lodash@^4.15.0, lodash@^4.16.6, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1, lodash@~4.17.2:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -4393,6 +4393,12 @@ react-native-action-button@^2.6.4:
   version "2.6.4"
   resolved "https://registry.yarnpkg.com/react-native-action-button/-/react-native-action-button-2.6.4.tgz#90b9bb7b88b57079f85e40e6060e0bbad45a74e4"
 
+react-native-avatar-gravatar@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-avatar-gravatar/-/react-native-avatar-gravatar-0.0.4.tgz#7d215d0259bb7dae147a755b33d4c0487320f97b"
+  dependencies:
+    blueimp-md5 "^2.3"
+
 react-native-dismiss-keyboard@1.0.0, react-native-dismiss-keyboard@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-dismiss-keyboard/-/react-native-dismiss-keyboard-1.0.0.tgz#32886242b3f2317e121f3aeb9b0a585e2b879b49"
@@ -4427,7 +4433,7 @@ react-native-easy-grid@^0.1.8:
   dependencies:
     lodash "^4.11.1"
 
-react-native-keyboard-aware-scroll-view@0.2.7, react-native-keyboard-aware-scroll-view@^0.2.7:
+react-native-keyboard-aware-scroll-view@0.2.7:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/react-native-keyboard-aware-scroll-view/-/react-native-keyboard-aware-scroll-view-0.2.7.tgz#dd344cec25284b6314f1cc9d1b75ba267483c6b6"
   dependencies:
@@ -4472,6 +4478,12 @@ react-native-scrollable-tab-view@^0.7.1:
 react-native-tab-view@^0.0.57:
   version "0.0.57"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-0.0.57.tgz#715e2ea4100fa50168e134df3947dd76ebd55743"
+
+react-native-useravatar@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-useravatar/-/react-native-useravatar-2.0.0.tgz#dc50e1c5e0f257a302564be3688c009e6a96e176"
+  dependencies:
+    babel-preset-react "^6.3.13"
 
 react-native-vector-icons@3.0.0:
   version "3.0.0"
@@ -4639,6 +4651,12 @@ react-tween-state@^0.1.5:
   dependencies:
     raf "^3.1.0"
     tween-functions "^1.0.1"
+
+react-useravatar-native@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-useravatar-native/-/react-useravatar-native-1.0.2.tgz#e17f79503c69f7e95eeaf9fb4d7009bf16da5817"
+  dependencies:
+    babel-preset-react "^6.3.13"
 
 react@^15.4.2, react@~15.4.0:
   version "15.4.2"

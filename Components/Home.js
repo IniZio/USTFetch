@@ -12,7 +12,10 @@ import ActionButton from 'react-native-action-button';
 
 import variables from '../theme/variables/platform'
 
-import MissionBoard from './MissionBoard'
+// Tab components
+import MissionList from './MissionList'
+import MessageList from './MessageList'
+import UserProfile from './UserProfile'
 
 export default class Home extends Component {
   static navigationOptions = {
@@ -37,12 +40,16 @@ export default class Home extends Component {
 
   render = () => (
     <Container>
-      <Tabs>
+      <Tabs initialPage={2}>
         <Tab heading="Missions">
-          <MissionBoard navigation={this.props.navigation} />
+          <MissionList navigation={this.props.navigation} />
         </Tab>
-        <Tab heading="Messages"></Tab>
-        <Tab heading="Me"></Tab>
+        <Tab heading="Messages">
+          <MessageList navigation={this.props.navigation} />
+        </Tab>
+        <Tab heading="Me">
+          <UserProfile navigation={this.props.navigation} />
+        </Tab>
       </Tabs>
       <ActionButton buttonColor={variables.brandPrimary} title="New Mission" degrees={0} activeOpacity={1} useNativeFeedback={true}
         onPress={() => this.props.navigation.navigate('TaskForm')}
