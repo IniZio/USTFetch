@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, Image } from 'react-native'
+import { StyleSheet, Image, StatusBar, Animated } from 'react-native'
 import {
   View, Container, Content,
   Left, Right, Body,
@@ -13,17 +13,18 @@ import ActionButton from 'react-native-action-button';
 import variables from '../theme/variables/platform'
 
 // Tab components
-import MissionList from './MissionList'
-import MessageList from './MessageList'
+import TaskBoard from './TaskBoard'
+import ChatList from './ChatList'
 import UserProfile from './UserProfile'
 
 export default class Home extends Component {
   static navigationOptions = {
     header: {
+      // visible: false,
       style: {
         elevation: 0
       },
-      left: <Image style={{ maxHeight: 40 }} resizeMethod="scale" source={require('../USTFetch1.png')}/>,
+      left: <Image style={{ height: 25, width: 75 }} source={require('../Fetch.png')}/>,
       right:<View style={{ flexDirection: 'row' }}>
               <Button transparent>
                 <Icon name="heart"/>
@@ -38,24 +39,35 @@ export default class Home extends Component {
     }
   }
 
+  hideCreateButton = () => {
+    console.log('Hidding button')
+  }
+
   render = () => (
-    <Container>
-      <Tabs initialPage={2}>
-        <Tab heading="Missions">
-          <MissionList navigation={this.props.navigation} />
+    <Container style={{ marginTop: StatusBar.currentHeight }}>
+      <Tabs initialPage={0}>
+        <Tab heading="Explore">
+          <TaskBoard navigation={this.props.navigation} onScroll={() => this.hideCreateButton()} />
         </Tab>
-        <Tab heading="Messages">
-          <MessageList navigation={this.props.navigation} />
+        <Tab heading="Chats">
+          <ChatList navigation={this.props.navigation} />
         </Tab>
         <Tab heading="Me">
           <UserProfile navigation={this.props.navigation} />
         </Tab>
       </Tabs>
-      <ActionButton buttonColor={variables.brandPrimary} title="New Mission" degrees={0} activeOpacity={1} useNativeFeedback={true}
+      {/*<ActionButton buttonColor={variables.brandPrimary} title="New Task" degrees={0} activeOpacity={0.8} useNativeFeedback={true}
         onPress={() => this.props.navigation.navigate('TaskForm')}
       >
         <Icon name="add" />
-      </ActionButton>
+      </ActionButton>*/}
+      <View style={{position: 'absolute', left: 0, right: 0, bottom: 30, justifyContent: 'center', alignItems: 'center', height: 50}}>
+      <Button primary full rounded style={{ alignSelf: 'center', width: 250, shadowColor: 'black', opacity: 0.4, shadowOpacity: 0.6, shadowRadius: 50, shadowOffset: { height: 20, width: 0 },  }}
+        onPress={() => this.props.navigation.navigate('TaskForm')}
+      >
+        <Text>Create Task</Text>
+      </Button>
+      </View>
     </Container>
   )
 }

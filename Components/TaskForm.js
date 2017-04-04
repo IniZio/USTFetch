@@ -10,10 +10,13 @@ import {
 } from 'native-base'
 import { Grid, Col, Row } from 'react-native-easy-grid'
 
+const ROLE_FETCHER = 'Fetcher'
+const fakeFetcher =   { userID: 2, userAlias: 'Epan',  role: ROLE_FETCHER,   objective: 'Pencil' }
+
 export default class TaskForm extends Component {
   static navigationOptions = {
     header: {
-      title: 'Uniqlo Flannel',
+      title: 'New Task',
     }
   }
   state = {
@@ -50,12 +53,12 @@ export default class TaskForm extends Component {
                     <Spinner />
                   </View> :
                   <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 70, marginHorizontal: 30 }}>
-                    <View><Text>Mission {this.state.bidStatus} !</Text></View>
+                    <View><Text>Task {this.state.bidStatus} !</Text></View>
                     <Button primary block onPress={() => {
                       this.setState({
                         requestModalVisible: false
                       })
-                      this.props.navigation.navigate('ChatRoom')
+                      this.props.navigation.navigate('ChatRoom', { receiver: fakeFetcher })
                       }}>
                       <Icon name="arrow-forward" />
                     </Button>

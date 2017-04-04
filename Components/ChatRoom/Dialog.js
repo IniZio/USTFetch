@@ -5,7 +5,7 @@ import { Avatar } from 'react-native-material-ui'
 
 import variables from '../../theme/variables/platform'
 
-export default class ChatRow extends Component {
+export default class Dialog extends Component {
   state = {
     decided: false,
     decision: false
@@ -20,46 +20,46 @@ export default class ChatRow extends Component {
 
   render = () => (
     <View>{
-      this.props.message.name === 'me' ?
+      this.props.dialog.userAlias === 'me' ?
       // When author is user
-        <View style={{...styles.chatRow, ...styles.chatRowRight}}>
-          <View style={{...styles.chatBubble, ...styles.chatBubbleRight}}>
-              <Text style={{ backgroundColor: 'transparent', color: variables.textColor }}>
-                {this.props.message.content}
+        <View style={{...styles.dialogRow, ...styles.dialogRowRight}}>
+          <View style={{...styles.dialog, ...styles.dialogRight}}>
+              <Text style={{ backgroundColor: 'transparent', color: variables.inverseTextColor }}>
+                {this.props.dialog.content}
               </Text>
           </View>
         </View>:
-        this.props.message.name === 'bot' ?
-          // When auther is bot
-          <View style={{...styles.chatRow, ...styles.chatRowCenter}}>
+        this.props.dialog.userAlias === 'bot' ?
+          // When author is bot
+          <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
             <View style={{ flex: 1, flexDirection: 'column' }}>
               <View style={{ alignSelf: 'center', height: 8, zIndex: 100 }}>
                 <Avatar size={16} style={{ container: {backgroundColor: variables.brandPrimary } }} />
               </View>
-              <View style={{...styles.chatBubble, ...styles.chatBubbleCenter}}>
+              <View style={{...styles.dialog, ...styles.dialogCenter}}>
                   <Text style={{ backgroundColor: 'transparent', color: variables.textColor, fontSize: 12 }}>
-                    {this.props.message.content}
+                    {this.props.dialog.content}
                   </Text>
               </View>
             </View>
           </View> :
           // Other users
-          <View style={styles.chatRow}>
+          <View style={styles.dialogRow}>
             <View style={{ alignSelf: 'flex-end', height: 30 }}>
               <Avatar size={30} text="E" />
             </View>
-            <View style={styles.chatBubble}>
-                <Text style={{ backgroundColor: 'transparent', color: variables.inverseTextColor }}>
-                  {this.props.message.content}
+            <View style={styles.dialog}>
+                <Text style={{ backgroundColor: 'transparent', color: variables.textColor }}>
+                  {this.props.dialog.content}
                 </Text>
             </View>
           </View>
     }
 
     {
-      this.props.message.type === 'decide' ?
+      this.props.dialog.type === 'decide' ?
         !this.state.decided ?
-        <View style={{...styles.chatRow, ...styles.chatRowCenter}}>
+        <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
           <Button transparent small onPress={() => this.makeDecision(false)}>
             <Text>No</Text>
           </Button>
@@ -79,24 +79,24 @@ export default class ChatRow extends Component {
 }
 
 const styles = {
-  // Rows of chat bubbles
-  chatRow: {
+  // Rows of dialog bubbles
+  dialogRow: {
     marginVertical: 5,
     marginHorizontal: 2,
     flexDirection: 'row',
     alignItems: 'center'
   },
-  chatRowRight: {
+  dialogRowRight: {
     justifyContent: 'flex-end'
   },
-  chatRowCenter: {
+  dialogRowCenter: {
     justifyContent: 'center'
   },
 
-  // Chat bubble
-  chatBubble: {
-    borderColor: variables.brandPrimary,
-    backgroundColor: variables.brandPrimary,
+  // dialog bubble
+  dialog: {
+    borderColor: '#F6F4F7',
+    backgroundColor: '#F6F4F7',
     borderWidth: 5,
     borderRadius: 8,
     paddingHorizontal: 5,
@@ -105,14 +105,14 @@ const styles = {
     marginHorizontal: 2,
     justifyContent: 'center'
   },
-  chatBubbleRight: {
-    borderColor: 'white',
-    backgroundColor: 'white',
+  dialogRight: {
+    borderColor: variables.brandPrimary,
+    backgroundColor: variables.brandPrimary,
     alignSelf: 'flex-end',
   },
-  chatBubbleCenter: {
-    borderColor: 'white',
-    backgroundColor: 'white',
+  dialogCenter: {
+    borderColor: '#F6F4F7',
+    backgroundColor: '#F6F4F7',
     alignSelf: 'center',
   }
 }
