@@ -2,28 +2,41 @@ import React, { Component } from 'react'
 import { Content, Body, Card, CardItem, View, Icon , Text} from 'native-base'
 import {Avatar} from 'react-native-material-ui'
 
-import MissionList from '../MissionList'
+const fakeUserBase = [
+  { userID: 1, userAlias: 'yihao', fullName: 'Yihao Chan', rating: 5 },
+  { userID: 2, userAlias: 'epan',  fullName:  'Edmun Pan', rating: 5 }
+]
 
 const fakeProfile = {
-  username: 'inizio',
-  fullname: 'Newman Chow',
+  userAlias: 'inizio',
+  fullName: 'Newman Chow',
   rating: 4
 }
 
-const fakeOngoingMissions = [
-  { name: 'Uniqlo Flannel', deadline: '3 hours left', username: 'Yihao' },
-]
-
-const fakeCompletedMissions = [
-  { name: 'Uniqlo Flannel', username: 'Yihao' },
-]
-
 export default class UserProfile extends Component {
-  state = {
-    profile: fakeProfile,
-    ongoingMissions: fakeOngoingMissions,
-    completedMissions: fakeCompletedMissions
+  static navigationOptions = {
+    header: ({ state }) => ({
+      title: <View>
+             <Text>{
+               !state.params ?
+               fakeProfile.userAlias :
+               fakeUserBase.filter(user => user.userID === state.params.user.userID)[0].userAlias
+             } 's Profile</Text>
+             </View>
+    })
   }
+  state = {
+    profile: fakeProfile
+  }
+
+  componentWillMount () {
+    let userID = this.props.navigation.state.params && this.props.navigation.state.params.user.userID
+    let othersProfile = fakeUserBase.filter( user => user.userID === userID )[0]
+    if (othersProfile) {
+      this.setState({ profile: othersProfile })
+    }
+  }
+
   render = () => (
     <Content>
       <Card>
@@ -31,10 +44,10 @@ export default class UserProfile extends Component {
           <Body>
             <View style={{ flexDirection: 'row', flex: 1, paddingVertical: 5 }}>
               <View style={{ height: 50, width: 55 }}>
-                <Avatar text={this.state.profile.username[0]} size={40} />
+                <Avatar text={this.state.profile.userAlias[0]} size={40} />
               </View>
               <View style={{ flexDirection: 'column', flex: 1 }}>
-                <Text>{this.state.profile.fullname}</Text>
+                <Text>{this.state.profile.fullName}</Text>
                 <View style={{ flexDirection: 'row', flex: 1 }}>
                   {[,...Array(5)].map((x, index) => (
                     <Icon name="ios-star" style={{ fontSize: 20 }} key={index}
@@ -47,8 +60,6 @@ export default class UserProfile extends Component {
           </Body>
         </CardItem>
       </Card>
-      <View><Text>Ongoing Missions</Text></View>
-      <View><MissionList navigation={this.props.navigation} /></View>
     </Content>
   )
 }

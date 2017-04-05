@@ -8,7 +8,7 @@ import {
 } from 'native-base'
 import { Avatar } from 'react-native-material-ui';
 
-export default class MissionDetail extends Component {
+export default class TaskDetail extends Component {
   static navigationOptions = {
     header: {
       title: 'Uniqlo Flannel',
@@ -30,7 +30,7 @@ export default class MissionDetail extends Component {
               <Image source={require('../USTFetch.png')} />
             </View>
             <View style={{ flexDirection: 'column', flex: 1 }}>
-              <Text>Edmund Pan</Text>
+              <Text>Yihao Chan</Text>
               <View style={{ flexDirection: 'row', flex: 1 }}>
                 {[,...Array(5)].map((x, index) => (
                   <Icon name="star" style={{ fontSize: 20 }} key={index}/>
@@ -42,7 +42,7 @@ export default class MissionDetail extends Component {
               Suspendisse nulla sem, pellentesque vel elit sed, mollis aliquam quam. Vestibulum ut velit sed neque mattis euismod. Sed at elementum mauris, quis eleifend lorem. Duis faucibus lacinia varius. Donec et velit sed orci mattis semper. Aliquam non laoreet urna. Vivamus vestibulum vulputate tellus nec blandit. Pellentesque cursus magna quis ante.
             </Text>
             <Button primary full onPress={() => this.props.navigation.navigate('TaskForm')}>
-              <Text>Join</Text>
+              <Text>Fetch!</Text>
             </Button>
           </View>
         </Body>

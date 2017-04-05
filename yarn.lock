@@ -1160,7 +1160,7 @@ babel-preset-react-native@1.9.1, babel-preset-react-native@^1.5.6, babel-preset-
     babel-plugin-transform-regenerator "^6.5.0"
     react-transform-hmr "^1.0.4"
 
-babel-preset-react@^6.16.0, babel-preset-react@^6.3.13:
+babel-preset-react@^6.16.0:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-preset-react/-/babel-preset-react-6.23.0.tgz#eb7cee4de98a3f94502c28565332da9819455195"
   dependencies:
@@ -1304,7 +1304,7 @@ bluebird@^3.4.7:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
 
-blueimp-md5@^2.3, blueimp-md5@^2.5.0:
+blueimp-md5@^2.5.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/blueimp-md5/-/blueimp-md5-2.7.0.tgz#7f518e0dd70467fefe28ecba398916092f2a02a9"
 
@@ -4393,12 +4393,6 @@ react-native-action-button@^2.6.4:
   version "2.6.4"
   resolved "https://registry.yarnpkg.com/react-native-action-button/-/react-native-action-button-2.6.4.tgz#90b9bb7b88b57079f85e40e6060e0bbad45a74e4"
 
-react-native-avatar-gravatar@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/react-native-avatar-gravatar/-/react-native-avatar-gravatar-0.0.4.tgz#7d215d0259bb7dae147a755b33d4c0487320f97b"
-  dependencies:
-    blueimp-md5 "^2.3"
-
 react-native-dismiss-keyboard@1.0.0, react-native-dismiss-keyboard@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-dismiss-keyboard/-/react-native-dismiss-keyboard-1.0.0.tgz#32886242b3f2317e121f3aeb9b0a585e2b879b49"
@@ -4439,6 +4433,10 @@ react-native-keyboard-aware-scroll-view@0.2.7:
   dependencies:
     react-timer-mixin "^0.13.3"
 
+react-native-list-popover@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-list-popover/-/react-native-list-popover-1.0.5.tgz#a14bab87f28c59481d4d12d08bcd458a41a7bb20"
+
 "react-native-maps@https://github.com/exponent/react-native-maps/archive/v0.12.2-exp.1.tar.gz":
   version "0.12.2"
   resolved "https://github.com/exponent/react-native-maps/archive/v0.12.2-exp.1.tar.gz#1984bfe5a8a341dd3b44ad565cfcd1b25a5c2b03"
@@ -4455,6 +4453,24 @@ react-native-material-ui@^1.8.0:
     lodash.merge "^4.0.0"
     react-native-material-design-styles "^0.2.6"
     react-native-vector-icons "3.0.0"
+
+react-native-modal-dropdown@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-modal-dropdown/-/react-native-modal-dropdown-0.4.2.tgz#a4223823d0aa04eb45c451ded429845c25d62fd3"
+
+react-native-picker-android@~1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-picker-android/-/react-native-picker-android-1.0.3.tgz#1607843bce510d35a28522511994d3cfced344dd"
+
+react-native-picker@3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-picker/-/react-native-picker-3.0.5.tgz#9cbce518640efe6211439cbe5c1fd20a5e117eea"
+  dependencies:
+    react-native-picker-android "~1.0.3"
+
+react-native-prefix-picker@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-prefix-picker/-/react-native-prefix-picker-2.0.2.tgz#592c1c530d613fb9f44d2f2a3ce45806dac4868d"
 
 react-native-safe-module@^1.1.0:
   version "1.1.1"
@@ -4478,12 +4494,6 @@ react-native-scrollable-tab-view@^0.7.1:
 react-native-tab-view@^0.0.57:
   version "0.0.57"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-0.0.57.tgz#715e2ea4100fa50168e134df3947dd76ebd55743"
-
-react-native-useravatar@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-useravatar/-/react-native-useravatar-2.0.0.tgz#dc50e1c5e0f257a302564be3688c009e6a96e176"
-  dependencies:
-    babel-preset-react "^6.3.13"
 
 react-native-vector-icons@3.0.0:
   version "3.0.0"
@@ -4651,12 +4661,6 @@ react-tween-state@^0.1.5:
   dependencies:
     raf "^3.1.0"
     tween-functions "^1.0.1"
-
-react-useravatar-native@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-useravatar-native/-/react-useravatar-native-1.0.2.tgz#e17f79503c69f7e95eeaf9fb4d7009bf16da5817"
-  dependencies:
-    babel-preset-react "^6.3.13"
 
 react@^15.4.2, react@~15.4.0:
   version "15.4.2"

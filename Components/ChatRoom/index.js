@@ -1,60 +1,85 @@
 import React, { Component } from 'react'
-import { ScrollView, TextInput, KeyboardAvoidingView, Image } from 'react-native'
-import { Content, View, Text, Textarea, List, ListItem, Card, CardItem, Input, Button, Toast } from 'native-base'
+import { Components } from 'expo'
+import { ScrollView, TextInput, KeyboardAvoidingView, Image, TouchableOpacity } from 'react-native'
+import { Content, View, Text, Textarea, List, ListItem, Card, CardItem, Input, Button, Toast, Icon } from 'native-base'
 import { KeyboardAwareScrollView, KeyboardAwareListView } from 'react-native-keyboard-aware-scroll-view'
 
 import variables from '../../theme/variables/platform'
 
-import ChatRow from './ChatRow'
+import Dialog from './Dialog'
 
-const fakeMessages = [
-  { name: 'me',     content: 'Where are you now?' },
-  { name: 'epan',   content: '@locate me' },
-  { name: 'bot',    content: 'epan wants to locate himself', type: 'event' },
-  { name: 'bot',    content: <Image style={{ height: 180, width: 180 }} source={require('../../mapSample.png')} /> , type: 'info' },
-  { name: 'epan',   content: '@mission complete' },
-  { name: 'bot',    content: 'epan wants to confirm mission complete', type: 'event' },
-  { name: 'bot',    content: 'Is mission complete?', type: 'decide' }
+const fakedialogs = [
+  { userAlias: 'bot',    content: 'ask epan where is he now :)', type: 'info' },  
+  { userAlias: 'me',     content: 'Where are you now?' },
+  { userAlias: 'epan',   content: '@locate me' },
+  { userAlias: 'bot',    content: 'epan wants to locate himself', type: 'event' },
+  // { userAlias: 'bot',    content: <Image style={{ height: 180, width: 180 }} source={require('../../mapSample.png')} /> , type: 'info' },
+  { userAlias: 'bot',    content: <Components.MapView
+                                    style={{ flex: 1, height: 180, width: 180 }}
+                                    initialRegion={{
+                                      latitude: 37.78825,
+                                      longitude: -122.4324,
+                                      latitudeDelta: 0.0922,
+                                      longitudeDelta: 0.0421,
+                                    }}
+                                  >
+                                    <Components.MapView.Marker draggable
+                                      coordinate={{latitude: 37.78825, longitude: -122.4324 }}
+                                      title={'somewhere'}
+                                      description={'some description maybe'}
+                                    />
+                                  </Components.MapView> , type: 'consensus' },
+  { userAlias: 'epan',   content: '@task complete' },
+  { userAlias: 'bot',    content: 'epan wants to confirm task complete', type: 'event' },
+  { userAlias: 'bot',    content: 'Is task complete?', type: 'decide' }
 ]
 
-export default class ChatRoom extends Component {
+export default class dialogRoom extends Component {
   static navigationOptions = {
-    header: {
-      title: 'Edmund Pan'
-    }
+    header: ({navigate, state}) => ({
+      title: <TouchableOpacity onPress={() => navigate('Profile', { user: state.params.receiver })}>
+             <View>
+              <Text>{ state.params.receiver.userAlias }<Text style={{ fontSize: 10 }}>({ state.params.objective })</Text></Text>
+              <Text note style={{ textAlign: 'center' }}>{ state.params.receiver.role }</Text>
+             </View>
+             </TouchableOpacity>,
+      right: <Button transparent>
+              <Icon name="md-more" />
+             </Button>
+    })
   }
   state = {
-    messages: fakeMessages,
-    message: ''
+    dialogs: fakedialogs,
+    dialog: ''
   }
 
-  sendMessage = message => {
-    if (message) {
+  sendDialog = dialog => {
+    if (dialog) {
       this.setState({
-        messages: this.state.messages.concat([
-          { name: 'me',     content: message }
+        dialogs: this.state.dialogs.concat([
+          { alias: 'me',     content: dialog }
         ])
       })
     }
     // TODO clear textbox
   }
-  checkMagic = message => {
-    if (message[0] === '@') {
-      // Toast.show({
-      //   text: 'No magic yet >:D',
-      //   type: 'danger',
-      //   position: 'center',
-      //   buttonText: 'dammit...',
-      //   duration: 3000
-      // })
+  checkMagic = dialog => {
+    if (dialog[0] === '@' && dialog.length <= 1) {
+      Toast.show({
+        text: 'No magic yet >:D',
+        type: 'danger',
+        position: 'center',
+        buttonText: 'dammit...',
+        duration: 3000
+      })
     }
   }
 
   render = () => (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
     <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={65} contentContainerStyle={{flex: 1}} style={{flex: 1}}>
-      <List dataArray={this.state.messages} renderRow={message => (
-        <ChatRow message={message} />
+      <List dataArray={this.state.dialogs} renderRow={dialog => (
+        <Dialog dialog={dialog} navigation={this.props.navigation} />
       )} />
       <View style={{ height: 40,flexDirection: 'row' }} >
         <Input
@@ -69,7 +94,7 @@ export default class ChatRoom extends Component {
           placeholderTextColor={variables.inputColorPlaceholder}
           placeholder="Type @ for magic ;)"
           onChangeText={text => this.checkMagic(text)}
-          onSubmitEditing={e => this.sendMessage(e.nativeEvent.text)}
+          onSubmitEditing={e => this.sendDialog(e.nativeEvent.text)}
         />
       </View>
     </KeyboardAvoidingView>
