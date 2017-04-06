@@ -2,7 +2,7 @@
   "name": "ustfetch",
   "description": "No description",
   "slug": "ustfetch",
-  "sdkVersion": "14.0.0",
+  "sdkVersion": "15.0.0",
   "version": "1.0.0",
   "orientation": "portrait",
   "ios": {
