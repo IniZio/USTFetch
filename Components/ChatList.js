@@ -27,7 +27,7 @@ export default class ChatList extends Component {
               <Avatar text={task.userAlias[0]} size={40} />
             </View>
             <View style={{ flexDirection: 'column' }}>
-              <Text>{task.userAlias}({task.objective})</Text>
+              <Text>{task.userAlias}<Text style={{ fontSize: 10 }}>({task.objective})</Text></Text>
               <Text note>{task.content}</Text>
             </View>
             <Right>

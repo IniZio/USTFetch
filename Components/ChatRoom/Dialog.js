@@ -37,7 +37,7 @@ export default class Dialog extends Component {
                 <Avatar size={16} style={{ container: {backgroundColor: variables.brandPrimary } }} />
               </View>
               <View style={{...styles.dialog, ...styles.dialogCenter}}>
-                  <Text style={{ backgroundColor: 'transparent', color: variables.textColor, fontSize: 12 }}>
+                  <Text style={{ backgroundColor: 'transparent', color: variables.textColor, fontSize: 13 }}>
                     {this.props.dialog.content}
                   </Text>
               </View>

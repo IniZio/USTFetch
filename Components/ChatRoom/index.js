@@ -9,12 +9,12 @@ import variables from '../../theme/variables/platform'
 import Dialog from './Dialog'
 
 const fakedialogs = [
-  { userAlias: 'bot',    content: 'ask epan where is he now :)', type: 'info' },  
+  { userAlias: 'bot',    content: 'ask epan where is he now :)', type: 'info' },
   { userAlias: 'me',     content: 'Where are you now?' },
   { userAlias: 'epan',   content: '@locate me' },
-  { userAlias: 'bot',    content: 'epan wants to locate himself', type: 'event' },
+  { userAlias: 'bot',    content: 'epan is at HKUST', type: 'event' },
   // { userAlias: 'bot',    content: <Image style={{ height: 180, width: 180 }} source={require('../../mapSample.png')} /> , type: 'info' },
-  { userAlias: 'bot',    content: <Components.MapView
+  /*{ userAlias: 'bot',    content: <Components.MapView
                                     style={{ flex: 1, height: 180, width: 180 }}
                                     initialRegion={{
                                       latitude: 37.78825,
@@ -28,9 +28,8 @@ const fakedialogs = [
                                       title={'somewhere'}
                                       description={'some description maybe'}
                                     />
-                                  </Components.MapView> , type: 'consensus' },
+                                  </Components.MapView> , type: 'consensus' },*/
   { userAlias: 'epan',   content: '@task complete' },
-  { userAlias: 'bot',    content: 'epan wants to confirm task complete', type: 'event' },
   { userAlias: 'bot',    content: 'Is task complete?', type: 'decide' }
 ]
 
