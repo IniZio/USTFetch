@@ -1,8 +1,8 @@
 {
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 25946,
-  "expoServerNgrokUrl": "https://vn-dbv.inizio.ustfetch.exp.direct",
-  "packagerNgrokUrl": "https://packager.vn-dbv.inizio.ustfetch.exp.direct",
-  "ngrokPid": 26293
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }
