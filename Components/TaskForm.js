@@ -27,15 +27,17 @@ export default class TaskForm extends Component {
   }
 
   submitRequest = () => {
-    this.setState({
-      requestModalVisible: true
-    })
+    // this.setState({
+    //   requestModalVisible: true
+    // })
 
-    setTimeout(() => {
-      this.setState({
-        bidStatus: 'ACCEPTED'
-      })
-    }, 2000)
+    // setTimeout(() => {
+    //   this.setState({
+    //     bidStatus: 'ACCEPTED'
+    //   })
+    // }, 2000)
+
+    this.props.navigation.navigate('ChatRoom', { receiver: fakeFetcher })
   }
 
   render = () => (
