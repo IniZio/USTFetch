@@ -10,10 +10,10 @@ export default class ReviewItem extends Component {
     return (
       <ListItem>
         <View style={{width: 70}}>
-          <Avatar text={review.reviewer.userAlias[0]} size={40} />
+          <Avatar text={review.reviewer.userAlias[0]} size={50} />
         </View>
         <Body style={{ flexDirection: 'column' }}>
-          <Text>{review.reviewer.userAlias}<Text style={{ fontSize: 10 }}>({review.reviewer.role})</Text></Text>
+          <Text>{review.reviewer.userAlias}<Text>({review.reviewer.role})</Text></Text>
           <Text numberOfLines={5}>{review.content}</Text>
         </Body>
         <Right>{

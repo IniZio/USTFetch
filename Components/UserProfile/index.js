@@ -20,8 +20,8 @@ const fakeProfile = {
 }
 
 const fakeOngoingTasks = [
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, status: 'MEETUP' },
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, status: 'MEETUP' }
+  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, status: 'MEETUP', tip: 5 },
+  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, status: 'MEETUP', tip: 5 }
 ]
 
 const fakeCompletedTasks = []
@@ -72,7 +72,7 @@ export default class UserProfile extends Component {
                 <Text>{this.state.profile.fullName}</Text>
                 <View style={{ flexDirection: 'row', flex: 1 }}>
                   {[,...Array(5)].map((x, index) => (
-                    <Icon name="ios-star" style={{ fontSize: 20 }} key={index}
+                    <Icon name="ios-star" key={index}
                           style={{ color: (this.state.profile.rating >= index) ? 'orange' : 'grey' }}
                     />
                   ))}

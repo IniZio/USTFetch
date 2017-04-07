@@ -38,8 +38,8 @@ export default class dialogRoom extends Component {
     header: ({navigate, state}) => ({
       title: <TouchableOpacity onPress={() => navigate('Profile', { user: state.params.receiver })}>
              <View>
-              <Text>{ state.params.receiver.userAlias }<Text style={{ fontSize: 10 }}>({ state.params.objective })</Text></Text>
-              <Text note style={{ textAlign: 'center' }}>{ state.params.receiver.role }</Text>
+              <Text>{ state.params.receiver.userAlias }<Text> ({ state.params.objective })</Text></Text>
+              <Text note style={{ textAlign: 'left' }}>{ state.params.receiver.role }</Text>
              </View>
              </TouchableOpacity>,
       right: <Button transparent>

@@ -23,15 +23,15 @@ export default class ChatList extends Component {
     <Content>
       <List dataArray={this.state.tasks} renderRow={task => (
         <ListItem onPress={() => this.props.navigation.navigate('ChatRoom', { receiver: { userID: task.userID, userAlias: task.userAlias, role: task.role }, objective: task.objective })} >
-            <View style={{width: 70}}>
+            <View style={{width: 70, alignItems: 'center', justifyContent: 'center'}}>
               <Avatar text={task.userAlias[0]} size={40} />
             </View>
             <View style={{ flexDirection: 'column' }}>
-              <Text>{task.userAlias}<Text style={{ fontSize: 10 }}>({task.objective})</Text></Text>
+              <Text>{task.userAlias} ({task.objective})</Text>
               <Text note>{task.content}</Text>
             </View>
             <Right>
-              <Button iconRight transparent >
+              <Button iconRight transparent onPress={() => this.props.navigation.navigate('ChatRoom', { receiver: { userID: task.userID, userAlias: task.userAlias, role: task.role }, objective: task.objective })} >
                 <Icon name="arrow-forward" />
               </Button>
             </Right>

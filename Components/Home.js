@@ -45,7 +45,7 @@ export default class Home extends Component {
 
   render = () => (
     <Container style={{ marginTop: StatusBar.currentHeight }}>
-      <View style={{ height: 15, backgroundColor: variables.footerDefaultBg }}></View>
+      <View style={{ height: 6, backgroundColor: variables.footerDefaultBg }}></View>
       <Tabs initialPage={0}>
         <Tab heading="Explore">
           <TaskBoard navigation={this.props.navigation} onScroll={() => this.hideCreateButton()} />

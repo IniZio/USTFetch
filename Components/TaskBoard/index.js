@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Text, ScrollView, TouchableOpacity, Animated } from 'react-native'
 import { Content, List, View, Button, Icon, ListItem } from 'native-base'
+import { FontAwesome } from '@expo/vector-icons'
 import Dropdown from 'react-native-modal-dropdown'
 
 import variables from '../../theme/variables/platform'
@@ -60,10 +61,10 @@ export default class TaskBoard extends Component {
                     style={{height: 50, flex: 1, alignItems: 'center', justifyContent: 'center', padding: 0}}
                     onSelect={(index, val) => this.setState({ category: val })}>
             <TouchableOpacity onPress={() => this.openFilter('categoryFilter')}>
-              <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: 2, paddingHorizontal: 30}}>
-                <Text note style={{ color: '#eee', fontSize: 12 }}>Category</Text>
+              <View style={{ flex: 1, flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start', padding: 5, paddingHorizontal: 30}}>
+                <Text note style={{ color: '#eee', fontSize: 12 }}>CATEGORY  <Icon style={{ color: variables.inverseTextColor, fontSize: 15 }} name="arrow-dropdown" /></Text>
                 <View transparent full  style={{ padding: 0, flex: 1, flexDirection: 'row', alignSelf: 'stretch', alignItems: 'center', justifyContent: 'flex-start' }}>
-                  <Text style={{ color: variables.inverseTextColor, fontSize: 15, width: 70 }} numberOfLines={1}>{this.state.category}</Text><Icon style={{ color: variables.inverseTextColor, fontSize: 15 }} name="arrow-down" />
+                  <Text style={{ color: variables.inverseTextColor, fontSize: 15, width: 70, fontWeight: 'bold' }} numberOfLines={1}>{this.state.category}</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -78,10 +79,12 @@ export default class TaskBoard extends Component {
                     style={{height: 50, flex: 1, alignItems: 'center', justifyContent: 'center', padding: 0}}
                     onSelect={(index, val) => this.setState({ from: val })}>
             <TouchableOpacity onPress={() => this.openFilter('fromFilter')}>
-              <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: 2, paddingHorizontal: 30}}>
-                <Text note style={{ color: '#eee', fontSize: 12 }}>From</Text>
+              <View style={{ flex: 1, flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start', padding: 5, paddingHorizontal: 30}}>
+                <Text note style={{ color: '#eee', fontSize: 12 }}>FROM  <Icon style={{ color: variables.inverseTextColor, fontSize: 15 }} name="arrow-dropdown" /></Text>
+                
                 <View transparent full  style={{ padding: 0, flex: 1, flexDirection: 'row', alignSelf: 'stretch', alignItems: 'center', justifyContent: 'flex-start', overflow: 'hidden' }}>
-                  <Text style={{ color: variables.inverseTextColor, fontSize: 15, width: 70 }} numberOfLines={1}>{this.state.from}</Text><Icon style={{ color: variables.inverseTextColor, fontSize: 15 }} name="arrow-down" />
+                  <Text style={{ color: variables.inverseTextColor, fontSize: 15, width: 70, fontWeight: 'bold' }} numberOfLines={1}>{this.state.from}</Text>
+                  
                 </View>
               </View>
             </TouchableOpacity>
@@ -96,15 +99,16 @@ export default class TaskBoard extends Component {
                     style={{height: 50, flex: 1, alignItems: 'center', justifyContent: 'center', padding: 0}}
                     onSelect={(index, val) => this.setState({ rankby: val })}>
             <TouchableOpacity onPress={() => this.openFilter('rankbyFilter')}>
-              <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: 2, paddingHorizontal: 30}}>
-                <Text note style={{ color: '#eee', fontSize: 12 }}>Rank by</Text>
+              <View style={{ flex: 1, flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start', padding: 5, paddingHorizontal: 30}}>
+                <Text note style={{ color: '#eee', fontSize: 12 }}>RANK BY  <Icon style={{ color: variables.inverseTextColor, fontSize: 15 }} name="arrow-dropdown" /></Text>
                 <View transparent full  style={{ padding: 0, flex: 1, flexDirection: 'row', alignSelf: 'stretch', alignItems: 'center', justifyContent: 'flex-start', overflow: 'scroll' }}>
-                  <Text style={{ color: variables.inverseTextColor, fontSize: 14, width: 50 }} numberOfLines={1}>{this.state.rankby}</Text><Icon style={{ color: variables.inverseTextColor, fontSize: 15 }} name="arrow-down" />
+                  <Text style={{ color: variables.inverseTextColor, fontSize: 14, width: 50, fontWeight: 'bold' }} numberOfLines={1}>{this.state.rankby}</Text>
                 </View>
               </View>
             </TouchableOpacity>
           </Dropdown>
         </View>
+       
         <Content
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
@@ -114,6 +118,7 @@ export default class TaskBoard extends Component {
             <TaskItem navigation={this.props.navigation} task={task} />
           )} />
         </Content>
+       
         <Animated.View style={{position: 'absolute', left: 0, right: 0, bottom: fabOffset, justifyContent: 'center', alignItems: 'center', height: 50}}>
         <Button light full rounded style={{ alignSelf: 'center', width: 250, shadowColor: 'black', shadowOpacity: 0.4 , shadowRadius: 30, shadowOffset: { height: 20, width: 0 },  }}
           onPress={() => this.props.navigation.navigate('TaskForm')}
