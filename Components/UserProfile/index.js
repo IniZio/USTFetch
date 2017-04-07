@@ -27,8 +27,8 @@ const fakeOngoingTasks = [
 const fakeCompletedTasks = []
 
 const fakeReviews = [
-  { reviewer: { userAlias: 'Yihao', userID: '1', role: 'Requester' }, content: 'This fetcher is nice and quick!', rating: 4 },
-  { reviewer: { userAlias: 'Epan', userID: '2', role: 'Fetcher' }, content: 'Vestibulum eget vehicula erat, sit amet eleifend eros. Sed sed bibendum nulla. Vestibulum consequat ultrices neque, at efficitur eros tempor mattis. Curabitur id ante ligula. Integer ultricies tempus semper. Nullam.', rating: 2 }
+  { reviewer: { userAlias: 'yihao', userID: '1', role: 'Requester' }, content: 'This fetcher is nice and quick!', rating: 4 },
+  { reviewer: { userAlias: 'epan', userID: '2', role: 'Fetcher' }, content: 'Vestibulum eget vehicula erat, sit amet eleifend eros. Sed sed bibendum nulla. Vestibulum consequat ultrices neque, at efficitur eros tempor mattis. Curabitur id ante ligula. Integer ultricies tempus semper. Nullam.', rating: 2 }
 ]
 
 export default class UserProfile extends Component {
