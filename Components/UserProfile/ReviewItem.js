@@ -13,7 +13,7 @@ export default class ReviewItem extends Component {
           <Avatar text={review.reviewer.userAlias[0]} size={50} />
         </View>
         <Body style={{ flexDirection: 'column' }}>
-          <Text>{review.reviewer.userAlias}<Text>({review.reviewer.role})</Text></Text>
+          <Text>{review.reviewer.userAlias}<Text note> as {review.reviewer.role}</Text></Text>
           <Text numberOfLines={5}>{review.content}</Text>
         </Body>
         <Right>{

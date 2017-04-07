@@ -15,25 +15,21 @@ export default class TaskItem extends Component {
     let task = this.props.task
     let { navigate } = this.props.navigation
     return (
-      <ListItem thumbnail onPress={() => navigate('TaskDetail', { receiver: { userID: task.userID, userAlias: task.userAlias, role: 'Requester' } , objective: task.objective } )}>
+      <ListItem avatar onPress={() => navigate('TaskDetail', { receiver: { userID: task.userID, userAlias: task.userAlias, role: 'Requester' } , objective: task.objective } )}>
         <Left>
-          <View style={{ height: 45, width: 50 }}>
-              <Avatar text={task.userAlias[0]} size={50} />
-            </View> 
-          {/*<Thumbnail square size={90} source={require('../../Fetch.png')} />*/}
+          <View style={{ height: 45, width: 50 }} onPress={() => navigate('Profile', { user: { userID: task.userID, userAlias: task.userAlias } })}>
+            <Avatar text={task.userAlias[0]} size={45} />
+          </View>
         </Left>
         <Body style={{ paddingVertical: 5 }}>
           <Text>{task.objective}</Text>
-          <Text note><Icon style={{ fontSize: 13 }} name="cash" /> ${task.tip}</Text>
+          <Text note><Icon style={{ fontSize: 13 }} name="cash" /> ${task.tip} tips</Text>
           <Text note><Icon style={{ fontSize: 13 }} name="stopwatch" />  {task.deadline}</Text>
 
           <TouchableOpacity activeOpacity={0.8} onPress={() => navigate('Profile', { user: { userID: task.userID, userAlias: task.userAlias } })}>
           <View style={{ flexDirection: 'row', flex: 1, marginVertical: 2 }}>
-            {/*<View style={{ height: 45, width: 50 }}>
-              <Avatar text={task.userAlias[0]} size={40} />
-            </View>*/}
             <View style={{ flexDirection: 'row', flex: 1 }}>
-              <Text note>Requester: <Text>{task.userAlias}</Text></Text>
+              <Text note><Text>{task.userAlias}</Text></Text>
               <View style={{ flexDirection: 'row', flex: 1, alignSelf: 'flex-end', marginBottom: 2 }}>
                 {[,...Array(5)].map((x, index) => (
                   <Icon name="ios-star" style={{ fontSize: 15, color: 'orange' }} key={index}/>
