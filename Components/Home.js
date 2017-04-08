@@ -20,7 +20,7 @@ import UserProfile from './UserProfile'
 export default class Home extends Component {
   static navigationOptions = {
     header: {
-      // visible: false,
+      visible: false,
       style: {
         elevation: 0
       },
@@ -45,6 +45,7 @@ export default class Home extends Component {
 
   render = () => (
     <Container style={{ marginTop: StatusBar.currentHeight }}>
+      <View style={{ height: 6, backgroundColor: variables.footerDefaultBg }}></View>
       <Tabs initialPage={0}>
         <Tab heading="Explore">
           <TaskBoard navigation={this.props.navigation} onScroll={() => this.hideCreateButton()} />
@@ -61,13 +62,6 @@ export default class Home extends Component {
       >
         <Icon name="add" />
       </ActionButton>*/}
-      <View style={{position: 'absolute', left: 0, right: 0, bottom: 30, justifyContent: 'center', alignItems: 'center', height: 50}}>
-      <Button primary full rounded style={{ alignSelf: 'center', width: 250, shadowColor: 'black', opacity: 0.4, shadowOpacity: 0.6, shadowRadius: 50, shadowOffset: { height: 20, width: 0 },  }}
-        onPress={() => this.props.navigation.navigate('TaskForm')}
-      >
-        <Text>Create Task</Text>
-      </Button>
-      </View>
     </Container>
   )
 }

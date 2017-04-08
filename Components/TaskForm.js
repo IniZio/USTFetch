@@ -21,19 +21,23 @@ export default class TaskForm extends Component {
   }
   state = {
     requestModalVisible: false,
-    bidStatus: 'PENDING'
+    bidStatus: 'PENDING',
+    cost: 0,
+    tip: 0
   }
 
   submitRequest = () => {
-    this.setState({
-      requestModalVisible: true
-    })
+    // this.setState({
+    //   requestModalVisible: true
+    // })
 
-    setTimeout(() => {
-      this.setState({
-        bidStatus: 'ACCEPTED'
-      })
-    }, 2000)
+    // setTimeout(() => {
+    //   this.setState({
+    //     bidStatus: 'ACCEPTED'
+    //   })
+    // }, 2000)
+
+    this.props.navigation.navigate('ChatRoom', { receiver: fakeFetcher })
   }
 
   render = () => (
@@ -80,7 +84,7 @@ export default class TaskForm extends Component {
               </Item>
               <View style={{ flexDirection: 'row', flex: 1 }}>
                 <Item stackedLabel style={{ width: 200 }}>
-                  <Label>Within:</Label><Input />
+                  <Label>Within:</Label><Input keyboardType="numeric" />
                 </Item>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <Picker
@@ -97,12 +101,12 @@ export default class TaskForm extends Component {
                 </View>
               </View>
               <View style={{ marginVertical: 10 }}>
-                <Label>Cost: </Label>
-                <Slider value={0.6}/>
+                <Label>Cost: {this.state.cost}</Label>
+                <Slider minimumValue={0} maximumValue={1000} step={5} onSlidingComplete={cost => this.setState({ cost })} />
               </View>
               <View style={{ marginVertical: 10 }}>
-                <Label>Tip: </Label>
-                <Slider value={0.2}/>
+                <Label>Tip: {this.state.tip}</Label>
+                <Slider minimumValue={0} maximumValue={100} step={2} onSlidingComplete={tip => this.setState({ tip })} />
               </View>
               <Item stackedLabel>
                 <Label>Additional information</Label>

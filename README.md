@@ -25,6 +25,10 @@ npm i -g react-native-cli yarn # install react native cli globally, alongside wi
       - Real device (recommended)
         1. Install 'Expo' app on your device
 
+      - GenyMotion (better than android studio)
+        2. Install [Genymotion](https://www.genymotion.com/fun-zone/), will need to register an account
+        3. Create a device (model must be `Android 6.0 (Marshmallow)` or above), and start the emulator
+
       -  Android studio
 
         1. go here : https://developer.android.com/studio/install.html to download
@@ -44,7 +48,7 @@ npm i -g react-native-cli yarn # install react native cli globally, alongside wi
 
         7. Open android studio, Tools -> android -> android -> AVD manager, create a device (model must be `Android 6.0 (Marshmallow)` or above), and start the emulator
 
-4. Fire up!
+4. #### Fire up!
 
    1. Start Expo XDE and add this project, then click on it in the list to start the 'server'
    2. Open in real device / android emulator
