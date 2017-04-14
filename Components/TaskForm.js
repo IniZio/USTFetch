@@ -5,7 +5,7 @@ import {
   Card, CardItem,
   Form,
   Item, InputGroup, Input, Label, Text,
-  Picker, Button, Icon,
+  Picker, Button, Icon, CheckBox,
   Spinner
 } from 'native-base'
 import { Grid, Col, Row } from 'react-native-easy-grid'
@@ -23,20 +23,11 @@ export default class TaskForm extends Component {
     requestModalVisible: false,
     bidStatus: 'PENDING',
     cost: 0,
-    tip: 0
+    tip: 0,
+    preferFemale: false
   }
 
   submitRequest = () => {
-    // this.setState({
-    //   requestModalVisible: true
-    // })
-
-    // setTimeout(() => {
-    //   this.setState({
-    //     bidStatus: 'ACCEPTED'
-    //   })
-    // }, 2000)
-
     this.props.navigation.navigate('ChatRoom', { receiver: fakeFetcher })
   }
 
@@ -101,12 +92,16 @@ export default class TaskForm extends Component {
                 </View>
               </View>
               <View style={{ marginVertical: 10 }}>
-                <Label>Cost: {this.state.cost}</Label>
-                <Slider minimumValue={0} maximumValue={1000} step={5} onSlidingComplete={cost => this.setState({ cost })} />
+                <Label>Cost: </Label>
+                <Input keyboardType="numeric" defaultValue={this.state.cost} onChange={({nativeEvent}) => this.setState({ cost: nativeEvent.text })} />
               </View>
               <View style={{ marginVertical: 10 }}>
                 <Label>Tip: {this.state.tip}</Label>
-                <Slider minimumValue={0} maximumValue={100} step={2} onSlidingComplete={tip => this.setState({ tip })} />
+                <Input keyboardType="numeric" defaultValue={this.state.tip} onChange={({nativeEvent}) => this.setState({ tip: nativeEvent.text })} />
+              </View>
+              <View style={{ marginVertical: 10 }}>
+                <Label> {this.state.tip}</Label>
+                <CheckBox checked={this.state.preferFemale} onPress={() => this.setState({ preferFemale: !this.state.preferFemale })} />
               </View>
               <Item stackedLabel>
                 <Label>Additional information</Label>
