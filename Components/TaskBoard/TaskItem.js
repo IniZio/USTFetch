@@ -15,10 +15,10 @@ export default class TaskItem extends Component {
     let task = this.props.task
     let { navigate } = this.props.navigation
     return (
-      <ListItem avatar onPress={() => navigate('TaskDetail', { receiver: { userID: task.userID, userAlias: task.userAlias, role: 'Requester' } , objective: task.objective } )}>
+      <ListItem thumbnail>
         <Left>
-          <View style={{ height: 45, width: 50 }} onPress={() => navigate('Profile', { user: { userID: task.userID, userAlias: task.userAlias } })}>
-            <Avatar text={task.userAlias[0]} size={45} />
+          <View style={{ height: 45, width: 50 }}>
+            <img src={require('../../Fetch.png')} />
           </View>
         </Left>
         <Body style={{ paddingVertical: 5 }}>
