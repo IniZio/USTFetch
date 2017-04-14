@@ -112,7 +112,7 @@ export default {
 
 
       // Color
-  brandPrimary: (platform === 'ios') ? '#ff69B4' : '#ff69B4',
+  brandPrimary: (platform === 'ios') ? '#02A8F3' : '#02A8F3',
   brandInfo: '#62B1F6',
   brandSuccess: '#5cb85c',
   brandDanger: '#d9534f',
@@ -154,7 +154,7 @@ export default {
   topTabBarActiveTextColor: (platform === 'ios') ? '#757575' : '#757575',
   topTabActiveBgColor: (platform === 'ios') ? '#cde1f9' : undefined,
   topTabBarBorderColor: (platform === 'ios') ? '#a7a6ab' : '#fff',
-  topTabBarActiveBorderColor: (platform === 'ios') ? '#ff69B4' : '#ff69B4',
+  topTabBarActiveBorderColor: (platform === 'ios') ? '#02A8F3' : '#02A8F3',
 
 
     // Header
