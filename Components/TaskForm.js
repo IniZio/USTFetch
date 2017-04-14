@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Slider, Modal } from 'react-native'
+import { Slider, Modal, TouchableOpacity } from 'react-native'
 import {
   Container, Content, Body, View,
   Card, CardItem,
   Form,
-  Item, InputGroup, Input, Label, Text,
+  Item, InputGroup, Input, Label, Text, ListItem,
   Picker, Button, Icon, CheckBox,
   Spinner
 } from 'native-base'
@@ -67,14 +67,14 @@ export default class TaskForm extends Component {
           <CardItem>
             <Body>
             <View style={{ alignSelf: 'stretch' }}>
-              <Item stackedLabel>
+              <Item style={{ marginVertical: 10 }}>
                 <Label>I need:</Label><Input />
               </Item>
-              <Item stackedLabel>
+              <Item style={{ marginVertical: 10 }}>
                 <Label>From:</Label><Input />
               </Item>
-              <View style={{ flexDirection: 'row', flex: 1 }}>
-                <Item stackedLabel style={{ width: 200 }}>
+              <View style={{ flexDirection: 'row', flex: 1, marginVertical: 10 }}>
+                <Item style={{ width: 200 }}>
                   <Label>Within:</Label><Input keyboardType="numeric" />
                 </Item>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -91,23 +91,23 @@ export default class TaskForm extends Component {
                 </Picker>
                 </View>
               </View>
-              <View style={{ marginVertical: 10 }}>
-                <Label>Cost: </Label>
-                <Input keyboardType="numeric" defaultValue={this.state.cost} onChange={({nativeEvent}) => this.setState({ cost: nativeEvent.text })} />
-              </View>
-              <View style={{ marginVertical: 10 }}>
-                <Label>Tip: {this.state.tip}</Label>
-                <Input keyboardType="numeric" defaultValue={this.state.tip} onChange={({nativeEvent}) => this.setState({ tip: nativeEvent.text })} />
-              </View>
-              <View style={{ marginVertical: 10 }}>
-                <Label> {this.state.tip}</Label>
-                <CheckBox checked={this.state.preferFemale} onPress={() => this.setState({ preferFemale: !this.state.preferFemale })} />
-              </View>
-              <Item stackedLabel>
+              <Item style={{ marginVertical: 10 }}>
+                <Label>Cost: $</Label><Input keyboardType="numeric" defaultValue={this.state.cost} onChange={({nativeEvent}) => this.setState({ cost: nativeEvent.text })} />
+              </Item>
+              <Item style={{ marginVertical: 10 }}>
+                <Label>Tip: $</Label><Input keyboardType="numeric" defaultValue={this.state.tip} onChange={({nativeEvent}) => this.setState({ tip: nativeEvent.text })} />
+              </Item>
+              <Item stackedLabel style={{ marginVertical: 10 }}>
                 <Label>Additional information</Label>
                 <Input />
               </Item>
-              <Button primary block style={{ marginTop: 30 }} onPress={() => this.submitRequest()}>
+              <TouchableOpacity activeOpacity={70} onPress={() => this.setState({ preferFemale: !this.state.preferFemale })}>
+              <View style={{ flex: 1, flexDirection: 'row', height: 50, alignItems: 'center' }}>
+                <View style={{ height: 20, width: 40 }}><CheckBox checked={this.state.preferFemale} /></View>
+                <View><Text>I would prefer a female fetcher</Text></View>
+              </View>
+              </TouchableOpacity>
+              <Button primary block onPress={() => this.submitRequest()}>
                 <Text>Request!</Text>
               </Button>
             </View>
