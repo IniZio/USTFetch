@@ -11,24 +11,8 @@ import Dialog from './Dialog'
 const fakedialogs = [
   { userAlias: 'bot',    content: 'ask epan where is he now :)', type: 'info' },
   { userAlias: 'me',     content: 'Where are you now?' },
-  { userAlias: 'epan',   content: '@locate me' },
+  { userAlias: 'epan',   content: '@locate me', type: 'command' },
   { userAlias: 'bot',    content: 'epan is at HKUST', type: 'event' },
-  // { userAlias: 'bot',    content: <Image style={{ height: 180, width: 180 }} source={require('../../mapSample.png')} /> , type: 'info' },
-  /*{ userAlias: 'bot',    content: <Components.MapView
-                                    style={{ flex: 1, height: 180, width: 180 }}
-                                    initialRegion={{
-                                      latitude: 37.78825,
-                                      longitude: -122.4324,
-                                      latitudeDelta: 0.0922,
-                                      longitudeDelta: 0.0421,
-                                    }}
-                                  >
-                                    <Components.MapView.Marker draggable
-                                      coordinate={{latitude: 37.78825, longitude: -122.4324 }}
-                                      title={'somewhere'}
-                                      description={'some description maybe'}
-                                    />
-                                  </Components.MapView> , type: 'consensus' },*/
   { userAlias: 'epan',   content: '@task complete' },
   { userAlias: 'bot',    content: 'Is task complete?', type: 'decide' }
 ]
@@ -75,12 +59,12 @@ export default class dialogRoom extends Component {
   }
 
   render = () => (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
+    <View style={{ flex: 1, backgroundColor: 'white', flexDirection: 'row' }}>
     <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={65} contentContainerStyle={{flex: 1}} style={{flex: 1}}>
       <List dataArray={this.state.dialogs} renderRow={dialog => (
         <Dialog dialog={dialog} navigation={this.props.navigation} />
       )} />
-      <View style={{ height: 40,flexDirection: 'row' }} >
+      <View style={{ height: 45,flexDirection: 'row', backgroundColor: variables.footerDefaultBg, padding: 5 }} >
         <Input
           blurOnSubmit
           clearTextOnFocus
@@ -89,11 +73,11 @@ export default class dialogRoom extends Component {
           enablesReturnKeyAutomatically
           returnKeyType="send"
           clearButtonMode="always"
-          style={{flex: 1, backgroundColor: variables.footerDefaultBg, fontSize: 16, padding: 5 }}
+          style={{flex: 1, backgroundColor: '#CECDD2', fontSize: 16, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 15 }}
           placeholderTextColor={variables.inputColorPlaceholder}
           placeholder="Type @ for magic ;)"
           onChangeText={text => this.checkMagic(text)}
-          onSubmitEditing={e => this.sendDialog(e.nativeEvent.text)}
+          onSubmitEditing={({nativeEvent}) => this.sendDialog(nativeEvent.text)}
         />
       </View>
     </KeyboardAvoidingView>
