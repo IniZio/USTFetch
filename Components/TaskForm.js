@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Slider, Modal } from 'react-native'
+import { Slider, Modal, TouchableOpacity } from 'react-native'
 import {
   Container, Content, Body, View,
   Card, CardItem,
   Form,
-  Item, InputGroup, Input, Label, Text,
-  Picker, Button, Icon,
+  Item, InputGroup, Input, Label, Text, ListItem,
+  Picker, Button, Icon, CheckBox,
   Spinner
 } from 'native-base'
 import { Grid, Col, Row } from 'react-native-easy-grid'
@@ -23,20 +23,11 @@ export default class TaskForm extends Component {
     requestModalVisible: false,
     bidStatus: 'PENDING',
     cost: 0,
-    tip: 0
+    tip: 0,
+    preferFemale: false
   }
 
   submitRequest = () => {
-    // this.setState({
-    //   requestModalVisible: true
-    // })
-
-    // setTimeout(() => {
-    //   this.setState({
-    //     bidStatus: 'ACCEPTED'
-    //   })
-    // }, 2000)
-
     this.props.navigation.navigate('ChatRoom', { receiver: fakeFetcher })
   }
 
@@ -76,14 +67,14 @@ export default class TaskForm extends Component {
           <CardItem>
             <Body>
             <View style={{ alignSelf: 'stretch' }}>
-              <Item stackedLabel>
+              <Item style={{ marginVertical: 10 }}>
                 <Label>I need:</Label><Input />
               </Item>
-              <Item stackedLabel>
+              <Item style={{ marginVertical: 10 }}>
                 <Label>From:</Label><Input />
               </Item>
-              <View style={{ flexDirection: 'row', flex: 1 }}>
-                <Item stackedLabel style={{ width: 200 }}>
+              <View style={{ flexDirection: 'row', flex: 1, marginVertical: 10 }}>
+                <Item style={{ width: 200 }}>
                   <Label>Within:</Label><Input keyboardType="numeric" />
                 </Item>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -100,19 +91,23 @@ export default class TaskForm extends Component {
                 </Picker>
                 </View>
               </View>
-              <View style={{ marginVertical: 10 }}>
-                <Label>Cost: {this.state.cost}</Label>
-                <Slider minimumValue={0} maximumValue={1000} step={5} onSlidingComplete={cost => this.setState({ cost })} />
-              </View>
-              <View style={{ marginVertical: 10 }}>
-                <Label>Tip: {this.state.tip}</Label>
-                <Slider minimumValue={0} maximumValue={100} step={2} onSlidingComplete={tip => this.setState({ tip })} />
-              </View>
-              <Item stackedLabel>
+              <Item style={{ marginVertical: 10 }}>
+                <Label>Cost: $</Label><Input keyboardType="numeric" defaultValue={this.state.cost} onChange={({nativeEvent}) => this.setState({ cost: nativeEvent.text })} />
+              </Item>
+              <Item style={{ marginVertical: 10 }}>
+                <Label>Tip: $</Label><Input keyboardType="numeric" defaultValue={this.state.tip} onChange={({nativeEvent}) => this.setState({ tip: nativeEvent.text })} />
+              </Item>
+              <Item stackedLabel style={{ marginVertical: 10 }}>
                 <Label>Additional information</Label>
                 <Input />
               </Item>
-              <Button primary block style={{ marginTop: 30 }} onPress={() => this.submitRequest()}>
+              <TouchableOpacity activeOpacity={70} onPress={() => this.setState({ preferFemale: !this.state.preferFemale })}>
+              <View style={{ flex: 1, flexDirection: 'row', height: 50, alignItems: 'center' }}>
+                <View style={{ height: 20, width: 40 }}><CheckBox checked={this.state.preferFemale} /></View>
+                <View><Text>I would prefer a female fetcher</Text></View>
+              </View>
+              </TouchableOpacity>
+              <Button primary block onPress={() => this.submitRequest()}>
                 <Text>Request!</Text>
               </Button>
             </View>
