@@ -15,8 +15,7 @@ export default class TaskItem extends Component {
   render = () => {
     let { task, navigation } = this.props
     return (
-      <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('TaskDetail', task)}>
-      <ListItem thumbnail>
+      <ListItem onPress={() => navigation.navigate('TaskDetail', task)} thumbnail>
         <Left>
           <View style={{ height: 45, width: 50 }}>
             <Image style={{ height: 45, width: 50 }} resizeMethod="resize" source={require('../../Fetch.png')} />
@@ -54,7 +53,6 @@ export default class TaskItem extends Component {
           }
         </Right>
       </ListItem>
-      </TouchableOpacity>
     )
   }
 }
