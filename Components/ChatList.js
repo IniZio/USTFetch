@@ -10,34 +10,52 @@ import {Avatar} from 'react-native-material-ui'
 const ROLE_FETCHER = 'Fetcher'
 const ROLE_REQUESTER = 'Requester'
 
-const fakeTasks = [
-  { content: 'What product would you like?', userID: 1, userAlias: 'Yihao', role: ROLE_REQUESTER, objective: 'Uniqlo Flannel' },
-  { content: 'Where are you now?',           userID: 2, userAlias: 'Epan',  role: ROLE_FETCHER,   objective: 'Pencil' }
+const fakeChats = [
+  { content: 'What product would you like?', chatID: 'abc', userID: 1, userAlias: 'Yihao', role: ROLE_REQUESTER, objective: 'Uniqlo Flannel' },
+  { content: 'Where are you now?',           chatID: 'xyz', userID: 2, userAlias: 'Epan',  role: ROLE_FETCHER,   objective: 'Pencil' }
 ]
 
 export default class ChatList extends Component {
   state = {
-    tasks: fakeTasks
+    chats: fakeChats
   }
-  render = () => (
+  constructor (props) {
+    super(props)
+    this.socket = this.props.socket
+  }
+  componentDidMount () {
+    for (let chat of this.state.chats) {
+      this.socket.emit('join room', chat.chatID, function () {
+        this.socket.on('message history', history => {
+          console.log('history: ', history)
+        })
+      }).bind(this)
+      this.socket.on('receive message', ({chatID, content}) => {
+        console.log('received message from ' + chatID + ': ' + content)
+      })
+    }
+  }
+  render = () => {
+    let {socket} = this.props
+    return (
     <Content>
-      <List dataArray={this.state.tasks} renderRow={task => (
-        <ListItem onPress={() => this.props.navigation.navigate('ChatRoom', { receiver: { userID: task.userID, userAlias: task.userAlias, role: task.role }, objective: task.objective })} >
+      <List dataArray={this.state.chats} renderRow={chat => (
+        <ListItem onPress={() => this.props.navigation.navigate('ChatRoom', { socket: this.socket, receiver: { userID: chat.userID, userAlias: chat.userAlias, role: chat.role }, objective: chat.objective, chatID: chat.chatID })} >
             <View style={{width: 70, alignItems: 'center', justifyContent: 'center'}}>
-              <Avatar text={task.userAlias[0]} size={40} />
+              <Avatar text={chat.userAlias[0]} size={40} />
             </View>
             <View style={{ flexDirection: 'column' }}>
-              <Text>{task.userAlias} ({task.role})</Text>
-              <Text note>{task.objective}</Text>
-              <Text note>{task.content}</Text>
+              <Text>{chat.userAlias} ({chat.role})</Text>
+              <Text note>{chat.objective}</Text>
+              <Text note>{chat.content}</Text>
             </View>
             <Right>
-              <Button iconRight transparent onPress={() => this.props.navigation.navigate('ChatRoom', { receiver: { userID: task.userID, userAlias: task.userAlias, role: task.role }, objective: task.objective })} >
+              <Button iconRight transparent onPress={() => this.props.navigation.navigate('ChatRoom', { receiver: { userID: chat.userID, userAlias: chat.userAlias, role: chat.role }, objective: chat.objective })} >
                 <Icon name="arrow-forward" />
               </Button>
             </Right>
         </ListItem>
       )} />
     </Content>
-  )
+  )}
 }
