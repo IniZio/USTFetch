@@ -8,14 +8,14 @@ import variables from '../../theme/variables/platform'
 
 import Dialog from './Dialog'
 
-const fakedialogs = [
-  { userAlias: 'bot', content: 'ask epan where is he now :)', type: 'info' },
-  { userAlias: 'me', content: 'Where are you now?' },
-  { userAlias: 'epan', content: '@locate me', type: 'command' },
-  { userAlias: 'bot', content: 'epan is at HKUST', type: 'event' },
-  { userAlias: 'epan', content: '@task complete' },
-  { userAlias: 'bot', content: 'Is task complete?', type: 'decide' }
-]
+// const fakedialogs = [
+//   { userAlias: 'bot', content: 'ask epan where is he now :)', type: 'info' },
+//   { userAlias: 'me', content: 'Where are you now?' },
+//   { userAlias: 'epan', content: '@locate me', type: 'command' },
+//   { userAlias: 'bot', content: 'epan is at HKUST', type: 'event' },
+//   { userAlias: 'epan', content: '@task complete' },
+//   { userAlias: 'bot', content: 'Is task complete?', type: 'decide' }
+// ]
 
 export default class dialogRoom extends Component {
   static navigationOptions = {
@@ -32,8 +32,12 @@ export default class dialogRoom extends Component {
     })
   }
   state = {
-    dialogs: fakedialogs,
+    dialogs: [],
     dialog: ''
+  }
+  constructor (props) {
+    super(props)
+    this.socket = this.props.navigation.state.params.socket
   }
 
   sendDialog = dialog => {
@@ -43,8 +47,11 @@ export default class dialogRoom extends Component {
           { alias: 'me', content: dialog }
         ])
       })
+      this.socket.emit('send message', { chatID: this.props.navigation.state.params.chatID, senderID: 'xxx', content: dialog })
     }
-    // TODO clear textbox
+    if (this.dialogInput != null) {
+      this.dialogInput._root.clear()
+    }
   }
   checkMagic = dialog => {
     if (dialog[0] === '@' && dialog.length <= 1) {
@@ -68,6 +75,7 @@ export default class dialogRoom extends Component {
         <Input
           blurOnSubmit
           clearTextOnFocus
+          ref={input => { this.dialogInput = input } }
           // multiline
           keyboardType="email-address"
           enablesReturnKeyAutomatically
