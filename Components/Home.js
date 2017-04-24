@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { StyleSheet, Image, StatusBar, Animated } from 'react-native'
+import io from 'socket.io-client'
 import {
   View, Container, Content,
   Left, Right, Body,
@@ -10,12 +11,14 @@ import {
 } from 'native-base';
 import ActionButton from 'react-native-action-button';
 
+import { SOCKET_URL } from '../api'
 import variables from '../theme/variables/platform'
 
 // Tab components
 import TaskBoard from './TaskBoard'
 import ChatList from './ChatList'
 import UserProfile from './UserProfile'
+
 
 export default class Home extends Component {
   static navigationOptions = {
@@ -38,6 +41,20 @@ export default class Home extends Component {
             </View>
     }
   }
+  state = {
+    activeTab: 'Chats'
+  }
+  constructor () {
+    super()
+    this.socket = io(SOCKET_URL)
+  }
+  componentDidMount () {
+    this.socket.on('receive message', () => {
+      if (this.state.activeTab !== 'Chats') {
+        this.setState({ unreadFlag: true })
+      }
+    })
+  }
 
   hideCreateButton = () => {
     console.log('Hidding button')
@@ -46,14 +63,14 @@ export default class Home extends Component {
   render = () => (
     <Container style={{ marginTop: StatusBar.currentHeight }}>
       <View style={{ height: 6, backgroundColor: variables.footerDefaultBg }}></View>
-      <Tabs initialPage={0}>
+      <Tabs initialPage={1} onChangeTab={() => this.setState({ activeTab: 'Explore' })}>
         <Tab heading="Explore">
           <TaskBoard navigation={this.props.navigation} onScroll={() => this.hideCreateButton()} />
         </Tab>
-        <Tab heading="Chats">
-          <ChatList navigation={this.props.navigation} />
+        <Tab heading="Chats" onChangeTab={() => this.setState({ activeTab: 'Chats' })}>
+          <ChatList navigation={this.props.navigation} socket={this.socket} />
         </Tab>
-        <Tab heading="Me">
+        <Tab heading="Me" onChangeTab={() => this.setState({ activeTab: 'Me' })}>
           <UserProfile navigation={this.props.navigation} />
         </Tab>
       </Tabs>
