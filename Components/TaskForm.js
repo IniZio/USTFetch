@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Slider, Modal, TouchableOpacity } from 'react-native'
+import { createTask } from '../api'
 import {
   Container, Content, Body, View,
   Card, CardItem,
@@ -11,12 +12,12 @@ import {
 import { Grid, Col, Row } from 'react-native-easy-grid'
 
 const ROLE_FETCHER = 'Fetcher'
-const fakeFetcher =   { userID: 2, userAlias: 'Epan',  role: ROLE_FETCHER,   objective: 'Pencil' }
+const fakeFetcher = { userID: 2, userAlias: 'Epan', role: ROLE_FETCHER, objective: 'Pencil' }
 
 export default class TaskForm extends Component {
   static navigationOptions = {
     header: {
-      title: 'New Task',
+      title: 'New Task'
     }
   }
   state = {
@@ -24,65 +25,52 @@ export default class TaskForm extends Component {
     bidStatus: 'PENDING',
     cost: 0,
     tip: 0,
-    preferFemale: false
+    preferFemale: false,
+    objective: '',
+    fromWhere: '',
+    toWhere: '',
+    description: '',
+    within: 0,
+    withinUnit: ''
   }
 
   submitRequest = () => {
-    this.props.navigation.navigate('ChatRoom', { receiver: fakeFetcher })
+    createTask({
+      requester_id: 'abc',
+      objective: this.state.objective,
+      from_where: this.state.fromWhere,
+      to_where: this.state.toWhere,
+      description: this.state.description,
+      cost: this.state.cost,
+      tip: this.state.tip
+    }).then(() => this.props.navigation.navigate('ChatRoom', { receiver: fakeFetcher }))
   }
 
   render = () => (
     <Content>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={this.state.requestModalVisible}
-      >
-        <Container style={{ backgroundColor: 'rgba(52, 52, 52, 0.4)', paddingHorizontal: 50, paddingVertical: 200 }}>
-          <Card>
-            <CardItem>
-              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>{
-                this.state.bidStatus === 'PENDING' ?
-                  <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 70, marginHorizontal: 30 }}>
-                    <Text>Waiting for Fetcher response</Text>
-                    <Spinner />
-                  </View> :
-                  <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 70, marginHorizontal: 30 }}>
-                    <View><Text>Task {this.state.bidStatus} !</Text></View>
-                    <Button primary block onPress={() => {
-                      this.setState({
-                        requestModalVisible: false
-                      })
-                      this.props.navigation.navigate('ChatRoom', { receiver: fakeFetcher })
-                      }}>
-                      <Icon name="arrow-forward" />
-                    </Button>
-                  </View>
-              }</View>
-            </CardItem>
-          </Card>
-        </Container>
-      </Modal>
         <Card>
           <CardItem>
             <Body>
             <View style={{ alignSelf: 'stretch' }}>
               <Item style={{ marginVertical: 10 }}>
-                <Label>I need:</Label><Input />
+                <Label>I need:</Label><Input onChangeText={objective => this.setState({ objective })} />
               </Item>
               <Item style={{ marginVertical: 10 }}>
-                <Label>From:</Label><Input />
+                <Label>From:</Label><Input onChangeText={fromWhere => this.setState({ fromWhere })} />
+              </Item>
+              <Item style={{ marginVertical: 10 }}>
+                <Label>To:</Label><Input onChangeText={toWhere => this.setState({ toWhere })} />
               </Item>
               <View style={{ flexDirection: 'row', flex: 1, marginVertical: 10 }}>
                 <Item style={{ width: 200 }}>
-                  <Label>Within:</Label><Input keyboardType="numeric" />
+                  <Label>Within:</Label><Input keyboardType="numeric" onChangeText={within => this.setState({ within }) } />
                 </Item>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <Picker
                   iosHeader="Select one"
                   mode="dropdown"
                   selectedValue="key0"
-                  onValueChange={() => {}}
+                  onValueChange={withinUnit => this.setState({ withinUnit })}
                   style={{width: 100}}
                   mode="dropdown"
                 >
@@ -92,14 +80,14 @@ export default class TaskForm extends Component {
                 </View>
               </View>
               <Item style={{ marginVertical: 10 }}>
-                <Label>Cost: $</Label><Input keyboardType="numeric" defaultValue={this.state.cost} onChange={({nativeEvent}) => this.setState({ cost: nativeEvent.text })} />
+                <Label>Cost: $</Label><Input keyboardType="numeric" defaultValue={this.state.cost} onChangeText={cost => this.setState({ cost })} />
               </Item>
               <Item style={{ marginVertical: 10 }}>
-                <Label>Tip: $</Label><Input keyboardType="numeric" defaultValue={this.state.tip} onChange={({nativeEvent}) => this.setState({ tip: nativeEvent.text })} />
+                <Label>Tip: $</Label><Input keyboardType="numeric" defaultValue={this.state.tip} onChangeText={tip => this.setState({ tip })} />
               </Item>
               <Item stackedLabel style={{ marginVertical: 10 }}>
                 <Label>Additional information</Label>
-                <Input />
+                <Input onChangeText={description => this.setState({ description })} />
               </Item>
               <TouchableOpacity activeOpacity={70} onPress={() => this.setState({ preferFemale: !this.state.preferFemale })}>
               <View style={{ flex: 1, flexDirection: 'row', height: 50, alignItems: 'center' }}>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Text, ScrollView, TouchableOpacity, Animated, Modal } from 'react-native'
+import { fetchTasks } from '../../api'
 import { Content, List, View, Button, Icon, ListItem, Card, CardItem, Body, Input, Header, Item } from 'native-base'
 import { FontAwesome } from '@expo/vector-icons'
 import Dropdown from 'react-native-modal-dropdown'
@@ -9,30 +10,19 @@ import variables from '../../theme/variables/platform'
 import FilterForm from './FilterForm'
 import TaskItem from './TaskItem'
 
-const fakeTasks = [
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, tip: 5},
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, tip: 5},
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, tip: 5},
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, tip: 5},
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, tip: 5},
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, tip: 5},
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, tip: 5},
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, tip: 5},
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, tip: 5},
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, tip: 5},
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, tip: 5},
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, tip: 5}
-]
-
 export default class TaskBoard extends Component {
   state = {
-    tasks: fakeTasks,
+    tasks: [],
     scrollY: new Animated.Value(30),
     category: '',
-    from : '',
+    from: '',
     rankby: '',
     filterVisible: false,
     filters: {}
+  }
+
+  componentDidMount () {
+    fetchTasks().then(tasks => this.setState({ tasks }))
   }
 
   toggleFilter = () => {
@@ -47,7 +37,7 @@ export default class TaskBoard extends Component {
     const fabOffset = this.state.scrollY.interpolate({
       inputRange: [-50, 40],
       outputRange: [120, -45],
-      extrapolate: 'clamp',
+      extrapolate: 'clamp'
     })
     return (
       <View style={{ flex: 1 }}>
@@ -81,10 +71,10 @@ export default class TaskBoard extends Component {
         </Content>
 
         <Animated.View style={{position: 'absolute', left: 0, right: 0, bottom: fabOffset, justifyContent: 'center', alignItems: 'center', height: 50}}>
-        <Button light full rounded style={{ alignSelf: 'center', width: 250, shadowColor: 'black', shadowOpacity: 0.4 , shadowRadius: 30, shadowOffset: { height: 20, width: 0 },  }}
+        <Button primary full rounded style={{ alignSelf: 'center', width: 250, shadowColor: 'black', shadowOpacity: 0.4 , shadowRadius: 30, shadowOffset: { height: 20, width: 0 }  }}
           onPress={() => this.props.navigation.navigate('TaskForm')}
         >
-          <Text>Create Task</Text>
+          <Text style={{ color: 'white' }}>Create Task</Text>
         </Button>
         </Animated.View>
       </View>

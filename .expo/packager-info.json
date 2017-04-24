@@ -1,8 +1,8 @@
 {
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 1258,
-  "expoServerNgrokUrl": "https://vn-dbv.manzaigit.ustfetch.exp.direct",
-  "packagerNgrokUrl": "https://packager.vn-dbv.manzaigit.ustfetch.exp.direct",
-  "ngrokPid": 1294
+  "packagerPid": 26077,
+  "expoServerNgrokUrl": "https://p5-r53.inizio.ustfetch.exp.direct",
+  "packagerNgrokUrl": "https://packager.p5-r53.inizio.ustfetch.exp.direct",
+  "ngrokPid": 26433
 }

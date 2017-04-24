@@ -9,12 +9,12 @@ import variables from '../../theme/variables/platform'
 import Dialog from './Dialog'
 
 const fakedialogs = [
-  { userAlias: 'bot',    content: 'ask epan where is he now :)', type: 'info' },
-  { userAlias: 'me',     content: 'Where are you now?' },
-  { userAlias: 'epan',   content: '@locate me', type: 'command' },
-  { userAlias: 'bot',    content: 'epan is at HKUST', type: 'event' },
-  { userAlias: 'epan',   content: '@task complete' },
-  { userAlias: 'bot',    content: 'Is task complete?', type: 'decide' }
+  { userAlias: 'bot', content: 'ask epan where is he now :)', type: 'info' },
+  { userAlias: 'me', content: 'Where are you now?' },
+  { userAlias: 'epan', content: '@locate me', type: 'command' },
+  { userAlias: 'bot', content: 'epan is at HKUST', type: 'event' },
+  { userAlias: 'epan', content: '@task complete' },
+  { userAlias: 'bot', content: 'Is task complete?', type: 'decide' }
 ]
 
 export default class dialogRoom extends Component {
@@ -40,7 +40,7 @@ export default class dialogRoom extends Component {
     if (dialog) {
       this.setState({
         dialogs: this.state.dialogs.concat([
-          { alias: 'me',     content: dialog }
+          { alias: 'me', content: dialog }
         ])
       })
     }
@@ -64,11 +64,11 @@ export default class dialogRoom extends Component {
       <List dataArray={this.state.dialogs} renderRow={dialog => (
         <Dialog dialog={dialog} navigation={this.props.navigation} />
       )} />
-      <View style={{ height: 45,flexDirection: 'row', backgroundColor: variables.footerDefaultBg, padding: 5 }} >
+      <View style={{ height: 45, flexDirection: 'row', backgroundColor: variables.footerDefaultBg, padding: 5 }} >
         <Input
           blurOnSubmit
           clearTextOnFocus
-          //multiline
+          // multiline
           keyboardType="email-address"
           enablesReturnKeyAutomatically
           returnKeyType="send"
