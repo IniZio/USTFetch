@@ -20,7 +20,7 @@ export default class Dialog extends Component {
 
   render = () => (
     <View>{
-      this.props.dialog.userAlias === 'me' ?
+      this.props.dialog.alias === 'me' ?
       // When author is user
         <View style={{...styles.dialogRow, ...styles.dialogRowRight}}>
           <View style={{...styles.dialog, ...styles.dialogRight}}>
@@ -29,7 +29,7 @@ export default class Dialog extends Component {
               </Text>
           </View>
         </View>:
-        this.props.dialog.userAlias === 'bot' ?
+        this.props.dialog.alias === 'bot' ?
           // When author is bot
           <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
             <View style={{ flex: 1, flexDirection: 'column' }}>
