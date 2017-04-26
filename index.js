@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import { AsyncStorage } from 'react-native'
 import Expo from 'expo'
 import { StyleProvider, Container } from 'native-base'
 import { ThemeProvider } from 'react-native-material-ui';
@@ -8,7 +9,7 @@ import Router from './router'
 
 import LoginForm from './Components/LoginForm'
 
-function cacheImages(images) {
+function cacheImages (images) {
   return images.map(image => {
     if (typeof image === 'string') {
       return Image.prefetch(image);
@@ -19,27 +20,29 @@ function cacheImages(images) {
 }
 
 async function cacheAssets () {
-    const imageAssets = await cacheImages([
-      require('./USTFetch.png'),
-      require('./USTFetch1.png'),
-      require('./mapSample.png')
-    ])
+  const imageAssets = await cacheImages([
+    require('./USTFetch.png'),
+    require('./USTFetch1.png'),
+    require('./mapSample.png')
+  ])
 }
 
 export default class Fetch extends Component {
   state = {
     appReady: false,
-    isLoginned: true,
+    token: null
   }
   componentWillMount () {
-    cacheAssets().then(() => {
+    cacheAssets().then(async () => {
+      try {
+        const token = await AsyncStorage.getItem('Authorization')
+        if (token) {
+          this.setState({ token })
+        }
+      } catch (err) {
+        console.log(err)
+      }
       this.setState({ appReady: true })
-    })
-  }
-
-  setUserState = loginState => {
-    this.setState({
-      isLoginned: loginState
     })
   }
 
@@ -48,7 +51,7 @@ export default class Fetch extends Component {
     <ThemeProvider>
       <Container>{
         this.state.appReady ?
-          (this.state.isLoginned ? <Router /> : <LoginForm onLogin={this.setUserState} />) :
+          (this.state.token ? <Router /> : <LoginForm onLogin={token => this.setState({ token })} />) :
           // TODO make loading screen when assets not ready
           null
       }</Container>

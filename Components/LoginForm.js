@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 import {
+  AsyncStorage,
   View,
   Image,
   TouchableWithoutFeedback
@@ -16,11 +17,27 @@ import {
   Container
 } from 'native-base'
 
+import { loginUser } from '../api'
 import variables from '../theme/variables/platform'
 
 export default class LoginForm extends Component {
   static navigationOptions = {
     header: { visible: false }
+  }
+  state = {
+    itsc: '',
+    password: ''
+  }
+
+  submitLogin = () => {
+    // const onLogin = this.props.onLogin
+    loginUser({ itsc: this.state.itsc, password: this.state.password }).then(({success, token}) => {
+      if (success) {
+        AsyncStorage.setItem('Authorization', token).then(() => {
+          // this.props.onLogin(token)
+        })
+      }
+    })
   }
 
   render = () => (
@@ -33,10 +50,10 @@ export default class LoginForm extends Component {
             </View>
             <Form>
               <Item>
-                <Input placeholder="ITSC" autoCapitalize="none" autoCorrect={false} autoFocus/>
+                <Input placeholder="ITSC" onChangeText={itsc => this.setState({ itsc }) } autoCapitalize="none" autoCorrect={false} autoFocus/>
               </Item>
               <Item>
-                <Input placeholder="Password" secureTextEntry />
+                <Input placeholder="Password" onChangeText={password => this.setState({ password })} secureTextEntry />
               </Item>
               <Grid style={{ marginTop: 20 }}>
                 <Col>
@@ -45,7 +62,7 @@ export default class LoginForm extends Component {
                   </Button>
                 </Col>
                 <Col>
-                  <Button primary onPressOut={() => this.props.onLogin(true)}>
+                  <Button primary block onPressOut={() => this.submitLogin()}>
                     <Text>Login/Signup</Text>
                   </Button>
                 </Col>
