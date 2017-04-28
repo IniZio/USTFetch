@@ -30,7 +30,8 @@ async function cacheAssets () {
 export default class Fetch extends Component {
   state = {
     appReady: false,
-    token: null
+    token: null,
+    itsc: ''
   }
   componentWillMount () {
     cacheAssets().then(async () => {
@@ -38,6 +39,10 @@ export default class Fetch extends Component {
         const token = await AsyncStorage.getItem('Authorization')
         if (token) {
           this.setState({ token })
+        }
+        const itsc = await AsyncStorage.getItem('itsc')
+        if (itsc) {
+          this.setState({ itsc })
         }
       } catch (err) {
         console.log(err)
@@ -51,7 +56,7 @@ export default class Fetch extends Component {
     <ThemeProvider>
       <Container>{
         this.state.appReady ?
-          (this.state.token ? <Router /> : <LoginForm onLogin={token => this.setState({ token })} />) :
+          (this.state.token ? <Router /> : <LoginForm onLogin={(token, itsc) => this.setState({ token, itsc })} />) :
           // TODO make loading screen when assets not ready
           null
       }</Container>
