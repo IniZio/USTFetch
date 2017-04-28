@@ -17,7 +17,7 @@ import {
   Container
 } from 'native-base'
 
-import { loginUser } from '../api'
+import { loginUser, registerUser } from '../api'
 import variables from '../theme/variables/platform'
 
 export default class LoginForm extends Component {
@@ -30,11 +30,19 @@ export default class LoginForm extends Component {
   }
 
   submitLogin = () => {
-    // const onLogin = this.props.onLogin
+    // IF login fail than try to register, if still fail than that means user used wrong password
     loginUser({ itsc: this.state.itsc, password: this.state.password }).then(({success, token}) => {
       if (success) {
         AsyncStorage.setItem('Authorization', token).then(() => {
-          // this.props.onLogin(token)
+          AsyncStorage.setItem('itsc', this.state.itsc).then(() => this.props.onLogin(token, this.state.itsc))
+        })
+      } else {
+        registerUser({ itsc: this.state.itsc, password: this.state.password }).then(({success, token}) => {
+          if (success) {
+            AsyncStorage.setItem('Authorization', token).then(() => {
+              AsyncStorage.setItem('itsc', this.state.itsc).then(() => this.props.onLogin(token, this.state.itsc))
+            })
+          }
         })
       }
     })
