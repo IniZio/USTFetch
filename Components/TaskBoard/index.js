@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Text, ScrollView, TouchableOpacity, Animated, Modal } from 'react-native'
-import { fetchTasks } from '../../api'
-import { Content, List, View, Button, Icon, ListItem, Card, CardItem, Body, Input, Header, Item } from 'native-base'
+import { Content, List, View, Button, Icon, ListItem, Card, CardItem, Body, Input, Header, Item, Spinner } from 'native-base'
 import { FontAwesome } from '@expo/vector-icons'
 import Dropdown from 'react-native-modal-dropdown'
 
+import { fetchTasks } from '../../api'
 import variables from '../../theme/variables/platform'
 
 import FilterForm from './FilterForm'
@@ -64,11 +64,13 @@ export default class TaskBoard extends Component {
             [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
           )}
           scrollEventThrottle={16} style={{ flex: 1 }}
-        >
-          <List dataArray={this.state.tasks} renderRow={task => (
+        >{
+          this.state.tasks
+          ? <List dataArray={this.state.tasks} renderRow={task => (
             <TaskItem navigation={this.props.navigation} task={task} />
           )} />
-        </Content>
+          : <Spinner color={variables.brandPrimary} />
+        }</Content>
 
         <Animated.View style={{position: 'absolute', left: 0, right: 0, bottom: fabOffset, justifyContent: 'center', alignItems: 'center', height: 50}}>
         <Button primary full rounded style={{ alignSelf: 'center', width: 250, shadowColor: 'black', shadowOpacity: 0.4 , shadowRadius: 30, shadowOffset: { height: 20, width: 0 }  }}

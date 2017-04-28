@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Image, TouchableOpacity } from 'react-native'
+import { View, Image, TouchableOpacity, AsyncStorage } from 'react-native'
 import TimeAgo from 'react-native-timeago'
 import {
   Body, Left, Right,
@@ -9,9 +9,16 @@ import {
 } from 'native-base'
 import {Avatar} from 'react-native-material-ui'
 
+import { updateTask } from '../../api'
 import variables from '../../theme/variables/platform'
 
 export default class TaskItem extends Component {
+  fetchTask = async () => {
+    const {task} = this.props
+    const itsc = await AsyncStorage.getItem('itsc')
+    await updateTask(task, { fetcher_id: itsc, status: 'ACCEPTED' })
+    // this.props.navigation.navigate('ChatRoom', { receiver: { userID: task.userID, userAlias: task.userAlias, role: 'Requester' }, objective: task.objective })
+  }
   render = () => {
     let { task, navigation } = this.props
     return (
@@ -44,10 +51,10 @@ export default class TaskItem extends Component {
         <Right style={{ paddingVertical: 0 }}>
           {
             task.status !== 'MEETUP'
-            ? <Button transparent block onPress={() => navigation.navigate('ChatRoom', { receiver: { userID: task.userID, userAlias: task.userAlias, role: 'Requester' }, objective: task.objective })}>
+            ? <Button transparent block onPress={() => this.fetchTask()}>
               <Text style={{ fontSize: 18, color: variables.brandPrimary}}>Fetch!</Text>
             </Button>
-            : <Button transparent block onPress={() => navigation.navigate('ChatRoom', { receiver: { userID: task.userID, userAlias: task.userAlias, role: 'Requester' }, objective: task.objective })}>
+            : <Button transparent block>
               <Text>{task.status}</Text>
             </Button>
           }

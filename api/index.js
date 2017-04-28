@@ -44,9 +44,19 @@ export function registerUser (form) {
 }
 
 // Task
-export async function fetchTasks () {
+export async function fetchTasks (page = 0) {
   let token = await AsyncStorage.getItem('Authorization')
-  return fetch(`${API_URL}/task`, {
+  return fetch(`${API_URL}/task?page=${page}`, {
+    headers: { Authorization: token, ...jsonHeader }
+  })
+    .then(response => response.json())
+    .catch(err => console.error(err))
+}
+
+export async function fetchChats () {
+  let token = await AsyncStorage.getItem('Authorization')
+  let itsc = await AsyncStorage.getItem('itsc')
+  return fetch(`${API_URL}/task?fid=${itsc}`, {
     headers: { Authorization: token, ...jsonHeader }
   })
     .then(response => response.json())
@@ -64,13 +74,13 @@ export async function createTask (task) {
     .catch(err => console.error(err))
 }
 
-export async function updateTask (task) {
+export async function updateTask (task, change) {
   let token = await AsyncStorage.getItem('Authorization')
-  return fetch(`${API_URL}/task`, {
-    method: 'PATCH',
+  return fetch(`${API_URL}/task/${task._id}`, {
+    method: 'PUT',
     headers: { Authorization: token, ...jsonHeader },
-    body: JSON.stringify(task)
+    body: JSON.stringify(change)
   })
-    .then(response => response.json())
+    .then(response => console.log(response))
     .catch(err => console.error(err))
 }
