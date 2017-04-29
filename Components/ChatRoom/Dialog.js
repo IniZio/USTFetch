@@ -20,7 +20,7 @@ export default class Dialog extends Component {
 
   render = () => (
     <View>{
-      this.props.dialog.alias === 'me' ?
+      this.props.dialog.senderID === this.props.itsc ?
       // When author is user
         <View style={{...styles.dialogRow, ...styles.dialogRowRight}}>
           <View style={{...styles.dialog, ...styles.dialogRight}}>
