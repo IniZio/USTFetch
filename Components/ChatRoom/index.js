@@ -56,14 +56,14 @@ export default class ChatRoom extends Component {
     })
   }
 
-  sendDialog = dialog => {
-    if (dialog) {
+  sendDialog = content => {
+    if (content) {
       this.setState({
         dialogs: this.state.dialogs.concat([
-          { senderID: this.state.itsc, content: dialog }
+          { senderID: this.state.itsc, content: content }
         ])
       })
-      this.socket.emit('send message', { chatID: this.props.navigation.state.params.chatID, senderID: this.state.itsc, content: dialog })
+      this.socket.emit('send message', { chatID: this.props.navigation.state.params.chatID, dialog: { senderID: this.state.itsc, content: content } })
     }
     if (this.dialogInput != null) {
       this.dialogInput._root.clear()
