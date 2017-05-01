@@ -36,9 +36,7 @@ export default class UserProfile extends Component {
     header: ({ state }) => ({
       title: <View>
              <Text>{
-               !state.params ?
-               fakeProfile.userAlias :
-               fakeUserBase.filter(user => user.userID === state.params.user.userID)[0].userAlias
+               state.params.user._id
              } 's Profile</Text>
              </View>
     })

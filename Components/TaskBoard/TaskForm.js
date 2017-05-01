@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { Slider, Modal, TouchableOpacity } from 'react-native'
-import { createTask } from '../api'
+import { createTask } from '../../api'
 import {
-  Container, Content, Body, View,
+  Container, Content, Body, View, Header,
+  Left, Right,
   Card, CardItem,
   Form,
-  Item, InputGroup, Input, Label, Text, ListItem,
+  Item, InputGroup, Input, Label, Text, ListItem, Title,
   Picker, Button, Icon, CheckBox,
   Spinner
 } from 'native-base'
@@ -43,11 +44,22 @@ export default class TaskForm extends Component {
       description: this.state.description,
       cost: this.state.cost,
       tip: this.state.tip
-    }).then(() => this.props.navigation.navigate('ChatRoom', { receiver: fakeFetcher }))
+    })
+    .then(() => { this.props.closeForm() })
   }
 
   render = () => (
-    <Content>
+    <Container>
+      <Header>
+        <Left>
+          <Button transparent onPress={() => this.props.closeForm()}><Icon name="close" /></Button>
+        </Left>
+        <Body>
+          <Title>Create Task</Title>
+        </Body>
+        <Right></Right>
+      </Header>
+      <Content>
         <Card>
           <CardItem>
             <Body>
@@ -103,5 +115,6 @@ export default class TaskForm extends Component {
           </CardItem>
         </Card>
       </Content>
+    </Container>
   )
 }

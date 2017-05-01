@@ -8,6 +8,7 @@ import { fetchTasks } from '../../api'
 import variables from '../../theme/variables/platform'
 
 import FilterForm from './FilterForm'
+import TaskForm from './TaskForm'
 import TaskItem from './TaskItem'
 
 export default class TaskBoard extends Component {
@@ -18,6 +19,7 @@ export default class TaskBoard extends Component {
     from: '',
     rankby: '',
     filterVisible: false,
+    taskFormVisible: false,
     filters: {},
     refreshing: false
   }
@@ -36,6 +38,9 @@ export default class TaskBoard extends Component {
   applyFilters = (filters) => {
     this.setState({ filters })
   }
+  toggleTaskForm = () => {
+    this.setState({ taskFormVisible: !this.state.taskFormVisible })
+  }
 
   render = () => {
     const { navigate } = this.props.navigation
@@ -48,10 +53,15 @@ export default class TaskBoard extends Component {
       <View style={{ flex: 1 }}>
         <Modal
           animationType="slide"
-          transparent={false}
           visible={this.state.filterVisible}
         >
           <FilterForm closeFilter={this.toggleFilter} applyFilters={this.applyFilters} />
+        </Modal>
+        <Modal
+          animationType="slide"
+          visible={this.state.taskFormVisible}
+         >
+          <TaskForm closeForm={this.toggleTaskForm} />
         </Modal>
         <Header searchBar rounded style={{ height: 40, paddingVertical: 5 }}>
           <Item>
@@ -81,7 +91,7 @@ export default class TaskBoard extends Component {
 
         <Animated.View style={{position: 'absolute', left: 0, right: 0, bottom: fabOffset, justifyContent: 'center', alignItems: 'center', height: 50}}>
         <Button primary full rounded style={{ alignSelf: 'center', width: 250, shadowColor: 'black', shadowOpacity: 0.4 , shadowRadius: 30, shadowOffset: { height: 20, width: 0 }  }}
-          onPress={() => this.props.navigation.navigate('TaskForm')}
+          onPress={() => this.toggleTaskForm()}
         >
           <Text style={{ color: 'white' }}>Create Task</Text>
         </Button>
