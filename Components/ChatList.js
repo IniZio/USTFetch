@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, RefreshControl } from 'react-native'
 import {
   Content, View,
   Left, Body, Right,
@@ -15,25 +15,14 @@ const ROLE_REQUESTER = 'Requester'
 
 export default class ChatList extends Component {
   state = {
-    chats: []
+    chats: [],
+    refreshing: false
   }
   constructor (props) {
     super(props)
     this.socket = this.props.socket
   }
   componentDidMount () {
-    AsyncStorage.getItem('itsc').then(itsc => {
-      fetchChats().then((chats) => {
-        console.log(chats)
-        if (chats) {
-          this.setState({ chats })
-          for (let chat of chats) {
-            // console.log('chat : ', JSON.stringify(chat, null, 2))
-            this.socket.emit('join room', { chatID: chat._id, userID: itsc })
-          }
-        }
-      })
-    })
     this.socket.on('message history', ({ chatID, history }) => {
       console.log('in chatlist -> history: ', history[0])
       const newChats = this.state.chats.map(chat => {
@@ -43,18 +32,34 @@ export default class ChatList extends Component {
       this.setState({ chats: newChats })
     })
     this.socket.on('receive message', ({ chatID, dialog }) => {
-      console.log('received message from ' + chatID + ': ' + dialog.senderID)
       const newChats = this.state.chats.map(chat => {
         if (chat._id === chatID) chat.lastDialog = dialog
       })
       this.setState({ chats: newChats })
     })
+    this.refreshChats()
+  }
+  refreshChats = () => {
+    this.setState({ refreshing: true })
+    AsyncStorage.getItem('itsc').then(itsc => {
+      fetchChats().then((chats) => {
+        if (chats) {
+          this.setState({ chats })
+          for (let chat of chats) {
+            this.socket.emit('join room', { chatID: chat._id, userID: itsc })
+          }
+        }
+        this.setState({ refreshing: false })
+      })
+    })
   }
   render = () => {
     return (
-    <Content>{
+    <View style={{ flex: 1 }}>{
       this.state.chats &&
-      <List dataArray={this.state.chats} renderRow={chat => (
+      <List refreshControl={
+            <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refreshChats()} />
+          } dataArray={this.state.chats} renderRow={chat => (
         <ListItem onPress={() => this.props.navigation.navigate('ChatRoom', { socket: this.socket, receiver: { _id: (chat.requester_id === this.state.itsc ? chat.fetcher_id : chat.requester_id), userAlias: 'dummmyalias', role: (chat.requester_id === this.state.itsc ? ROLE_FETCHER : ROLE_REQUESTER)}, objective: chat.objective, chatID: chat._id })}>
             <View style={{width: 70, alignItems: 'center', justifyContent: 'center'}}>
               <Avatar text={chat.requester_id === this.state.itsc ? chat.fetcher_id : chat.requester_id} size={40} />
@@ -71,7 +76,7 @@ export default class ChatList extends Component {
             </Right>
         </ListItem>
       )} />
-    }</Content>
+    }</View>
     )
   }
 }

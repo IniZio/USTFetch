@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, ScrollView, TouchableOpacity, Animated, Modal } from 'react-native'
+import { Text, ScrollView, RefreshControl, TouchableOpacity, Animated, Modal } from 'react-native'
 import { Content, List, View, Button, Icon, ListItem, Card, CardItem, Body, Input, Header, Item, Spinner } from 'native-base'
 import { FontAwesome } from '@expo/vector-icons'
 import Dropdown from 'react-native-modal-dropdown'
@@ -18,13 +18,18 @@ export default class TaskBoard extends Component {
     from: '',
     rankby: '',
     filterVisible: false,
-    filters: {}
+    filters: {},
+    refreshing: false
   }
 
   componentDidMount () {
-    fetchTasks().then(tasks => this.setState({ tasks }))
+    this.refreshTask()
   }
 
+  refreshTask = () => {
+    this.setState({ refreshing: true })
+    fetchTasks().then(tasks => this.setState({ tasks: tasks, refreshing: false }))
+  }
   toggleFilter = () => {
     this.setState({ filterVisible: !this.state.filterVisible })
   }
@@ -59,18 +64,20 @@ export default class TaskBoard extends Component {
           </Button>
         </Header>
 
-        <Content
-          onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
-          )}
-          scrollEventThrottle={16} style={{ flex: 1 }}
+        <View
+          style={{ flex: 1 }}
         >{
           this.state.tasks
-          ? <List dataArray={this.state.tasks} renderRow={task => (
+          ? <List onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
+          )}
+          scrollEventThrottle={16} refreshControl={
+            <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refreshTask()} />
+          } dataArray={this.state.tasks} renderRow={task => (
             <TaskItem navigation={this.props.navigation} task={task} />
           )} />
           : <Spinner color={variables.brandPrimary} />
-        }</Content>
+        }</View>
 
         <Animated.View style={{position: 'absolute', left: 0, right: 0, bottom: fabOffset, justifyContent: 'center', alignItems: 'center', height: 50}}>
         <Button primary full rounded style={{ alignSelf: 'center', width: 250, shadowColor: 'black', shadowOpacity: 0.4 , shadowRadius: 30, shadowOffset: { height: 20, width: 0 }  }}
