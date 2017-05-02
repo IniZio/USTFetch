@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { Content, Body, View,
          Card, CardItem,
-         Icon , Text,
+         Icon, Text, Button,
          List, ListItem } from 'native-base'
 import {Avatar} from 'react-native-material-ui'
+
+import { logoutUser } from '../../api'
 
 import TaskItem from '../TaskBoard/TaskItem'
 import ReviewItem from './ReviewItem'
@@ -90,6 +92,7 @@ export default class UserProfile extends Component {
         <ReviewItem review={review}/>
       } />
       </View>
+      <Button danger block onPressOut={logoutUser}><Text>Logout</Text></Button>
     </Content>
   )
 }

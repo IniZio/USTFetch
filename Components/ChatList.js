@@ -8,7 +8,7 @@ import {
 } from 'native-base'
 import {Avatar} from 'react-native-material-ui'
 
-import { fetchChats } from '../api'
+import { fetchTaskByID, fetchChats } from '../api'
 
 const ROLE_FETCHER = 'Fetcher'
 const ROLE_REQUESTER = 'Requester'
@@ -39,19 +39,20 @@ export default class ChatList extends Component {
     })
     this.refreshChats()
   }
-  refreshChats = () => {
+  refreshChats = async () => {
     this.setState({ refreshing: true })
-    AsyncStorage.getItem('itsc').then(itsc => {
-      fetchChats().then((chats) => {
-        if (chats) {
-          this.setState({ chats })
-          for (let chat of chats) {
-            this.socket.emit('join room', { chatID: chat._id, userID: itsc })
-          }
-        }
-        this.setState({ refreshing: false })
-      })
-    })
+    let itsc = await AsyncStorage.getItem('itsc')
+    let chats = await fetchChats()
+    if (chats) {
+      for (let chat of chats) {
+        let task = await fetchTaskByID(chat._id)
+        chat = Object.assign(chat, task)
+        console.log(chat)
+        this.socket.emit('join room', { chatID: chat._id, userID: itsc })
+      }
+      this.setState({ chats })
+    }
+    this.setState({ refreshing: false })
   }
   render = () => {
     return (
@@ -59,13 +60,14 @@ export default class ChatList extends Component {
       this.state.chats &&
       <List refreshControl={
             <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refreshChats()} />
-          } dataArray={this.state.chats} renderRow={chat => (
+          } dataArray={this.state.chats.filter(chat => chat.requester_id && chat.fetcher_id)} renderRow={chat => (
         <ListItem onPress={() => this.props.navigation.navigate('ChatRoom', { socket: this.socket, receiver: { _id: (chat.requester_id === this.state.itsc ? chat.fetcher_id : chat.requester_id), userAlias: 'dummmyalias', role: (chat.requester_id === this.state.itsc ? ROLE_FETCHER : ROLE_REQUESTER)}, objective: chat.objective, chatID: chat._id })}>
             <View style={{width: 70, alignItems: 'center', justifyContent: 'center'}}>
               <Avatar text={chat.requester_id === this.state.itsc ? chat.fetcher_id : chat.requester_id} size={40} />
             </View>
             <View style={{ flexDirection: 'column' }}>
               <Text>{chat.requester_id === this.state.itsc ? chat.fetcher_id : chat.requester_id} ({chat.requester_id === this.state.itsc ? ROLE_FETCHER : ROLE_REQUESTER})</Text>
+              <Text>{chat.fetcher_id}</Text>
               <Text note>{chat.objective}</Text>
               <Text note>{chat.lastDialog && chat.lastDialog.content}</Text>
             </View>

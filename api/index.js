@@ -3,6 +3,8 @@ import { AsyncStorage } from 'react-native'
 import io from 'socket.io-client'
 
 const SERVER_URL = 'http://192.168.31.144'
+// const SERVER_URL = 'http://10.89.80.125'
+// const SERVER_URL = 'http://10.89.151.157'
 
 export const SOCKET_URL = `${SERVER_URL}:8081`
 const API_URL = `${SERVER_URL}:8080`
@@ -53,10 +55,19 @@ export async function fetchTasks (page = 0) {
     .catch(err => console.error(err))
 }
 
+export async function fetchTaskByID (taskID) {
+  let token = await AsyncStorage.getItem('Authorization')
+  return fetch(`${API_URL}/task/${taskID}`, {
+    headers: { Authorization: token, ...jsonHeader }
+  })
+    .then(response => response.json())
+    .catch(err => console.error(err))
+}
+
 export async function fetchChats () {
   let token = await AsyncStorage.getItem('Authorization')
   let itsc = await AsyncStorage.getItem('itsc')
-  return fetch(`${API_URL}/task?fid=${itsc}`, {
+  return fetch(`${API_URL}/task?rfid=${itsc}`, {
     headers: { Authorization: token, ...jsonHeader }
   })
     .then(response => response.json())

@@ -1,21 +1,19 @@
 import React, { Component } from 'react'
 import { Components } from 'expo'
 import { AsyncStorage, ScrollView, TextInput, KeyboardAvoidingView, Image, TouchableOpacity } from 'react-native'
-import { Content, View, Text, Textarea, List, ListItem, Card, CardItem, Input, Button, Toast, Icon } from 'native-base'
+import { Content, View, Text, Textarea, List, ListItem, Card, CardItem, Input, Button, Toast, Icon, Left, Body, Right } from 'native-base'
 import { KeyboardAwareScrollView, KeyboardAwareListView } from 'react-native-keyboard-aware-scroll-view'
+import { MenuContext, Menu, MenuOptions, MenuOption, MenuTrigger, renderers } from 'react-native-popup-menu'
+const { SlideInMenu } = renderers
 
 import variables from '../../theme/variables/platform'
 
 import Dialog from './Dialog'
 
-// const fakedialogs = [
-//   { userAlias: 'bot', content: 'ask epan where is he now :)', type: 'info' },
-//   { userAlias: 'me', content: 'Where are you now?' },
-//   { userAlias: 'epan', content: '@locate me', type: 'command' },
-//   { userAlias: 'bot', content: 'epan is at HKUST', type: 'event' },
-//   { userAlias: 'epan', content: '@task complete' },
-//   { userAlias: 'bot', content: 'Is task complete?', type: 'decide' }
-// ]
+const commands = [
+  { syntax: 'abc', description: 'Sings the abc song...' },
+  { syntax: 'complete', description: 'Completes task' }
+]
 
 export default class ChatRoom extends Component {
   static navigationOptions = {
@@ -29,6 +27,7 @@ export default class ChatRoom extends Component {
     })
   }
   state = {
+    isMenuOpen: false,
     dialogs: [],
     dialog: '',
     itsc: '',
@@ -70,28 +69,47 @@ export default class ChatRoom extends Component {
     }
   }
   checkMagic = dialog => {
-    if (dialog[0] === '@' && dialog.length <= 1) {
-      Toast.show({
-        text: 'No magic yet >:D',
-        type: 'danger',
-        position: 'center',
-        buttonText: 'dammit...',
-        duration: 3000
-      })
+    // If is start of commmand
+    if (dialog[0] === '@' && !this.state.isMenuOpen) {
+      this.setState({ isMenuOpen: true })
+    } else if (dialog[0] !== '@' && this.state.isMenuOpen) {
+      this.setState({ isMenuOpen: false })
     }
   }
 
   render = () => (
     <View style={{ flex: 1, backgroundColor: 'white', flexDirection: 'row' }}>
     <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={65} contentContainerStyle={{flex: 1}} style={{flex: 1}}>
+      <MenuContext>
       <List dataArray={this.state.dialogs} renderRow={dialog => (
         <Dialog dialog={dialog} itsc={this.state.itsc} navigation={this.props.navigation} />
       )} />
+        <Menu name="numbers" renderer={SlideInMenu} opened={this.state.isMenuOpen} onClose={() => {
+          console.log('closed')
+          if (this.dialogInput != null) {
+            this.dialogInput._root.clear()
+          }
+        }}>
+          <MenuTrigger />
+          <MenuOptions>
+            <MenuOption>{
+              commands.map(command => (
+                <ListItem key={command.syntax}>
+                  <Left style={{ flex: 1 }}><Text>@{command.syntax}</Text></Left>
+                  <Body style={{ flex: 2 }}><Text>{command.description}</Text></Body>
+                </ListItem>
+              ))
+            }</MenuOption>
+          </MenuOptions>
+        </Menu>
+      </MenuContext>
       <View style={{ height: 45, flexDirection: 'row', backgroundColor: variables.footerDefaultBg, padding: 5 }} >
         <Input
           blurOnSubmit
           clearTextOnFocus
           ref={input => { this.dialogInput = input } }
+          value={this.state.dialog}
+          onChange={e => this.setState({ dialog: e.nativeEvent.text })}
           keyboardType="email-address"
           enablesReturnKeyAutomatically
           returnKeyType="send"
