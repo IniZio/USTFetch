@@ -77,8 +77,7 @@ export default class TaskBoard extends Component {
         <View
           style={{ flex: 1 }}
         >{
-          this.state.tasks
-          ? <List onScroll={Animated.event(
+          <List onScroll={Animated.event(
             [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
           )}
           scrollEventThrottle={16} refreshControl={
@@ -86,7 +85,6 @@ export default class TaskBoard extends Component {
           } dataArray={this.state.tasks} renderRow={task => (
             <TaskItem navigation={this.props.navigation} task={task} />
           )} />
-          : <Spinner color={variables.brandPrimary} />
         }</View>
 
         <Animated.View style={{position: 'absolute', left: 0, right: 0, bottom: fabOffset, justifyContent: 'center', alignItems: 'center', height: 50}}>

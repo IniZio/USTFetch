@@ -63,7 +63,7 @@ export default class Home extends Component {
   render = () => (
     <Container style={{ marginTop: StatusBar.currentHeight }}>
       <View style={{ height: 6, backgroundColor: variables.footerDefaultBg }}></View>
-      <Tabs initialPage={0} onChangeTab={() => this.setState({ activeTab: 'Explore' })}>
+      <Tabs initialPage={1} onChangeTab={() => this.setState({ activeTab: 'Explore' })}>
         <Tab heading="Explore">
           <TaskBoard navigation={this.props.navigation} onScroll={() => this.hideCreateButton()} />
         </Tab>
@@ -74,11 +74,6 @@ export default class Home extends Component {
           <UserProfile navigation={this.props.navigation} />
         </Tab>
       </Tabs>
-      {/*<ActionButton buttonColor={variables.brandPrimary} title="New Task" degrees={0} activeOpacity={0.8} useNativeFeedback={true}
-        onPress={() => this.props.navigation.navigate('TaskForm')}
-      >
-        <Icon name="add" />
-      </ActionButton>*/}
     </Container>
   )
 }

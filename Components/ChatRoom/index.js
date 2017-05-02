@@ -11,8 +11,9 @@ import variables from '../../theme/variables/platform'
 import Dialog from './Dialog'
 
 const commands = [
-  { syntax: 'abc', description: 'Sings the abc song...' },
-  { syntax: 'complete', description: 'Completes task' }
+  { syntax: 'setmtl', description: 'set meetup location' },
+  { syntax: 'setmtt', description: 'set meetup time' },
+  { syntax: 'complete', description: 'comfirm complete task' }
 ]
 
 export default class ChatRoom extends Component {
@@ -35,6 +36,13 @@ export default class ChatRoom extends Component {
   }
   constructor (props) {
     super(props)
+    this.state = {
+      isMenuOpen: false,
+      dialogs: [],
+      dialog: '',
+      itsc: '',
+      history: []
+    }
     this.socket = this.props.navigation.state.params.socket
   }
   componentDidMount () {
@@ -44,9 +52,8 @@ export default class ChatRoom extends Component {
     })
     this.socket.on('message history', ({ chatID, history }) => {
       if (this.props.navigation.state.params.chatID === chatID) {
-        this.setState({ dialogs: history.concat(this.state.dialogs) })
+        this.setState({ dialogs: history.reverse().concat(this.state.dialogs) })
       }
-      console.log('received history', history)
     })
     this.socket.on('receive message', ({ chatID, dialog }) => {
       if (this.props.navigation.state.params.chatID === chatID) {
@@ -55,22 +62,26 @@ export default class ChatRoom extends Component {
     })
   }
 
-  sendDialog = content => {
-    if (content) {
-      this.setState({
-        dialogs: this.state.dialogs.concat([
-          { senderID: this.state.itsc, content: content }
-        ])
-      })
-      this.socket.emit('send message', { chatID: this.props.navigation.state.params.chatID, dialog: { senderID: this.state.itsc, content: content } })
-    }
+  submitDialog = content => {
+    // If empty content
+    if (!content) return
+
+    let dialog = { senderID: this.state.itsc, content: content }
+
+    // Append the dialog
+    this.setState({
+      dialogs: this.state.dialogs.concat(dialog)
+    })
+    this.socket.emit('send message', { chatID: this.props.navigation.state.params.chatID, dialog: dialog })
+
+    // Clear dialog input
     if (this.dialogInput != null) {
       this.dialogInput._root.clear()
     }
   }
-  checkMagic = dialog => {
-    // If is start of commmand
-    if (dialog[0] === '@' && !this.state.isMenuOpen) {
+  listMagic = dialog => {
+    // If is a command
+    if (dialog[0] === '@' && commands.some(({syntax}) => `@${syntax}`.startsWith(dialog.split(' ')[0]))) {
       this.setState({ isMenuOpen: true })
     } else if (dialog[0] !== '@' && this.state.isMenuOpen) {
       this.setState({ isMenuOpen: false })
@@ -84,23 +95,16 @@ export default class ChatRoom extends Component {
       <List dataArray={this.state.dialogs} renderRow={dialog => (
         <Dialog dialog={dialog} itsc={this.state.itsc} navigation={this.props.navigation} />
       )} />
-        <Menu name="numbers" renderer={SlideInMenu} opened={this.state.isMenuOpen} onClose={() => {
-          console.log('closed')
-          if (this.dialogInput != null) {
-            this.dialogInput._root.clear()
-          }
-        }}>
+        <Menu name="numbers" renderer={SlideInMenu} opened={this.state.isMenuOpen}>
           <MenuTrigger />
-          <MenuOptions>
-            <MenuOption>{
-              commands.map(command => (
-                <ListItem key={command.syntax}>
-                  <Left style={{ flex: 1 }}><Text>@{command.syntax}</Text></Left>
-                  <Body style={{ flex: 2 }}><Text>{command.description}</Text></Body>
-                </ListItem>
-              ))
-            }</MenuOption>
-          </MenuOptions>
+          <MenuOptions>{
+            commands.filter((({syntax}) => `@${syntax}`.startsWith(this.state.dialog.split(' ')[0]))).map(command => (
+              <ListItem key={command.syntax} onPress={() => { this.setState({ dialog: `@${command.syntax}`, isMenuOpen: false }) }} >
+                <Left style={{ flex: 1 }}><Text>@{command.syntax}</Text></Left>
+                <Body style={{ flex: 2 }}><Text>{command.description}</Text></Body>
+              </ListItem>
+            ))
+          }</MenuOptions>
         </Menu>
       </MenuContext>
       <View style={{ height: 45, flexDirection: 'row', backgroundColor: variables.footerDefaultBg, padding: 5 }} >
@@ -117,7 +121,7 @@ export default class ChatRoom extends Component {
           style={{flex: 1, backgroundColor: '#CECDD2', fontSize: 16, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 15 }}
           placeholderTextColor={variables.inputColorPlaceholder}
           placeholder="Type @ for magic ;)"
-          onChangeText={text => this.checkMagic(text)}
+          onChangeText={text => this.listMagic(text)}
           onSubmitEditing={({nativeEvent}) => this.sendDialog(nativeEvent.text)}
         />
       </View>

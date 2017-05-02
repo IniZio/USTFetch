@@ -20,12 +20,16 @@ export default class ChatList extends Component {
   }
   constructor (props) {
     super(props)
+    this.state = {
+      chats: [],
+      refreshing: false
+    }
     this.socket = this.props.socket
   }
   componentDidMount () {
+    this.refreshChats()
     this.socket.on('message history', ({ chatID, history }) => {
-      console.log('in chatlist -> history: ', history[0])
-      const newChats = this.state.chats.map(chat => {
+      let newChats = this.state.chats.map(chat => {
         if (chat._id === chatID) chat.lastDialog = history[0]
         return chat
       })
@@ -34,10 +38,10 @@ export default class ChatList extends Component {
     this.socket.on('receive message', ({ chatID, dialog }) => {
       const newChats = this.state.chats.map(chat => {
         if (chat._id === chatID) chat.lastDialog = dialog
+        return chat
       })
       this.setState({ chats: newChats })
     })
-    this.refreshChats()
   }
   refreshChats = async () => {
     this.setState({ refreshing: true })
@@ -47,38 +51,34 @@ export default class ChatList extends Component {
       for (let chat of chats) {
         let task = await fetchTaskByID(chat._id)
         chat = Object.assign(chat, task)
-        console.log(chat)
         this.socket.emit('join room', { chatID: chat._id, userID: itsc })
       }
       this.setState({ chats })
     }
     this.setState({ refreshing: false })
   }
-  render = () => {
-    return (
+  render = () => (
     <View style={{ flex: 1 }}>{
-      this.state.chats &&
       <List refreshControl={
-            <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refreshChats()} />
-          } dataArray={this.state.chats.filter(chat => chat.requester_id && chat.fetcher_id)} renderRow={chat => (
-        <ListItem onPress={() => this.props.navigation.navigate('ChatRoom', { socket: this.socket, receiver: { _id: (chat.requester_id === this.state.itsc ? chat.fetcher_id : chat.requester_id), userAlias: 'dummmyalias', role: (chat.requester_id === this.state.itsc ? ROLE_FETCHER : ROLE_REQUESTER)}, objective: chat.objective, chatID: chat._id })}>
+        <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refreshChats()} />
+      } dataArray={this.state.chats.filter(chat => chat.requester_id && chat.fetcher_id)} renderRow={chat => (
+        <ListItem key={chat._id} onPress={() => this.props.navigation.navigate('ChatRoom', { socket: this.socket, receiver: { _id: (chat.requester_id === this.state.itsc ? chat.fetcher_id : chat.requester_id), userAlias: 'dummmyalias', role: (chat.requester_id === this.state.itsc ? ROLE_FETCHER : ROLE_REQUESTER)}, objective: chat.objective, chatID: chat._id })}>
             <View style={{width: 70, alignItems: 'center', justifyContent: 'center'}}>
-              <Avatar text={chat.requester_id === this.state.itsc ? chat.fetcher_id : chat.requester_id} size={40} />
+              <Avatar text={chat.requester_id === this.state.itsc ? chat.fetcher_id[0] : chat.requester_id[0]} size={40} />
             </View>
             <View style={{ flexDirection: 'column' }}>
               <Text>{chat.requester_id === this.state.itsc ? chat.fetcher_id : chat.requester_id} ({chat.requester_id === this.state.itsc ? ROLE_FETCHER : ROLE_REQUESTER})</Text>
-              <Text>{chat.fetcher_id}</Text>
               <Text note>{chat.objective}</Text>
-              <Text note>{chat.lastDialog && chat.lastDialog.content}</Text>
+              <Text note>{!!chat.lastDialog && chat.lastDialog.content}</Text>
+              {/*BUG: cannot rerender despite the state already updated for the last dialog?*/}
             </View>
             <Right>
-              <Button iconRight transparent>
+              <Button iconRight transparent onPress={() => this.props.navigation.navigate('ChatRoom', { socket: this.socket, receiver: { _id: (chat.requester_id === this.state.itsc ? chat.fetcher_id : chat.requester_id), userAlias: 'dummmyalias', role: (chat.requester_id === this.state.itsc ? ROLE_FETCHER : ROLE_REQUESTER)}, objective: chat.objective, chatID: chat._id })}>
                 <Icon name="arrow-forward" />
               </Button>
             </Right>
         </ListItem>
       )} />
     }</View>
-    )
-  }
+  )
 }
