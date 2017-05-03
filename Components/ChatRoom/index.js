@@ -10,11 +10,7 @@ import variables from '../../theme/variables/platform'
 
 import Dialog from './Dialog'
 
-const commands = [
-  { syntax: 'setmtl', description: 'set meetup location' },
-  { syntax: 'setmtt', description: 'set meetup time' },
-  { syntax: 'complete', description: 'comfirm complete task' }
-]
+import commands from './commands'
 
 export default class ChatRoom extends Component {
   static navigationOptions = {
@@ -31,8 +27,7 @@ export default class ChatRoom extends Component {
     isMenuOpen: false,
     dialogs: [],
     dialog: '',
-    itsc: '',
-    history: []
+    itsc: ''
   }
   constructor (props) {
     super(props)
@@ -40,8 +35,7 @@ export default class ChatRoom extends Component {
       isMenuOpen: false,
       dialogs: [],
       dialog: '',
-      itsc: '',
-      history: []
+      itsc: ''
     }
     this.socket = this.props.navigation.state.params.socket
   }
@@ -51,14 +45,23 @@ export default class ChatRoom extends Component {
       this.socket.emit('join room', { chatID: this.props.navigation.state.params.chatID, userID: itsc })
     })
     this.socket.on('message history', ({ chatID, history }) => {
+      history = history.reverse()
       if (this.props.navigation.state.params.chatID === chatID) {
-        this.setState({ dialogs: history.reverse().concat(this.state.dialogs) })
+        this.setState({ dialogs: history })
       }
     })
     this.socket.on('receive message', ({ chatID, dialog }) => {
       if (this.props.navigation.state.params.chatID === chatID) {
         this.setState({ dialogs: this.state.dialogs.concat(dialog) })
       }
+    })
+    // NOTE: not sure if works, React might not react to the change
+    this.socket.on('made decision', ({ chatID, dialogID, dialog }) => {
+      let newDialogs = this.state.dialogs.map(oldDialog => {
+        if (oldDialog._id === dialogID) return dialog
+        else return oldDialog
+      })
+      this.setState({ dialogs: newDialogs })
     })
   }
 
@@ -68,6 +71,10 @@ export default class ChatRoom extends Component {
 
     let dialog = { senderID: this.state.itsc, content: content }
 
+    // Get parameter if is command
+    // NOTE: now takes the parameter as sender's decision
+    if (dialog.content[0] === '@') dialog.decision = dialog.content.substr(dialog.content.indexOf(' ')+1)
+
     // Append the dialog
     this.setState({
       dialogs: this.state.dialogs.concat(dialog)
@@ -75,13 +82,17 @@ export default class ChatRoom extends Component {
     this.socket.emit('send message', { chatID: this.props.navigation.state.params.chatID, dialog: dialog })
 
     // Clear dialog input
+    this.setState({ dialog: '' })
     if (this.dialogInput != null) {
       this.dialogInput._root.clear()
     }
   }
+  submitDecision = update => {
+    this.socket.emit('make decision', { chatID: this.props.navigation.state.params.chatID, dialogID: update.dialogID, dialog: { decided: update.decided, decision: update.decision} })
+  }
   listMagic = dialog => {
     // If is a command
-    if (dialog[0] === '@' && commands.some(({syntax}) => `@${syntax}`.startsWith(dialog.split(' ')[0]))) {
+    if (dialog[0] === '@' && commands.some(({syntax}) => (`@${syntax}`).startsWith(dialog))) {
       this.setState({ isMenuOpen: true })
     } else if (dialog[0] !== '@' && this.state.isMenuOpen) {
       this.setState({ isMenuOpen: false })
@@ -92,15 +103,15 @@ export default class ChatRoom extends Component {
     <View style={{ flex: 1, backgroundColor: 'white', flexDirection: 'row' }}>
     <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={65} contentContainerStyle={{flex: 1}} style={{flex: 1}}>
       <MenuContext>
-      <ScrollView ref={dialogList => _dialogList = dialogList}>
+      <ScrollView ref={dialogList => { _dialogList = dialogList }}>
       <List dataArray={this.state.dialogs} renderRow={dialog => (
-        <Dialog dialog={dialog} itsc={this.state.itsc} navigation={this.props.navigation} />
-      )}  onContentSizeChange={() => { _dialogList && _dialogList.scrollToEnd({animated: true})}} scrollEnabled showsVerticalScrollIndicator />
+        <Dialog key={dialog._id} dialog={dialog} itsc={this.state.itsc} navigation={this.props.navigation} onMadeDecision={update=>this.submitDecision(update)} />
+      )} onContentSizeChange={() => { _dialogList && _dialogList.scrollToEnd({animated: false}) }} scrollEnabled showsVerticalScrollIndicator />
       </ScrollView>
         <Menu name="numbers" renderer={SlideInMenu} opened={this.state.isMenuOpen}>
           <MenuTrigger />
           <MenuOptions>{
-            commands.filter((({syntax}) => `@${syntax}`.startsWith(this.state.dialog.split(' ')[0]))).map(command => (
+            commands.filter(({syntax}) => (`@${syntax}`).startsWith(this.state.dialog)).map(command => (
               <ListItem key={command.syntax} onPress={() => { this.setState({ dialog: `@${command.syntax} `, isMenuOpen: false }) }} >
                 <Left style={{ flex: 1 }}><Text>@{command.syntax}</Text></Left>
                 <Body style={{ flex: 2 }}><Text>{command.description}</Text></Body>

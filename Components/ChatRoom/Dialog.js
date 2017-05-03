@@ -4,13 +4,15 @@ import { View, Text, Left, Button, Icon } from 'native-base'
 import { Avatar } from 'react-native-material-ui'
 
 import variables from '../../theme/variables/platform'
+import commands from './commands'
 
 const exampleDialog = { senderID: 'xxx', content: '@setmtl', decision: '', decided: false }
 
 export default class Dialog extends Component {
   state = {
     decided: this.props.dialog.decided,
-    decision: this.props.dialog.decision
+    decision: this.props.dialog.decision,
+    isMine: this.props.dialog.senderID === this.props.itsc
   }
 
   makeDecision = decision => {
@@ -18,20 +20,25 @@ export default class Dialog extends Component {
       decided: true,
       decision: decision
     })
+    this.props.onMadeDecision({ dialogID: this.props.dialog._id, decided: true, decision: decision })
   }
 
   commandDialog = dialog => {
-    switch (dialog.content.slice(1)) {
+    switch (dialog.content.slice(1).split(' ')[0]) {
       case 'complete': return (
         !this.state.decided ?
-          <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
-            <Button transparent small onPress={() => this.makeDecision(false)}>
-              <Text>No</Text>
-            </Button>
-            <Button primary rounded small onPress={() => this.makeDecision(true)}>
-              <Text>Yes</Text>
-            </Button>
-          </View> :
+          this.state.isMine ?
+            <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
+              <Text>Waiting for response</Text>
+            </View> :
+            <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
+              <Button transparent small onPress={() => this.makeDecision(false)}>
+                <Text>No</Text>
+              </Button>
+              <Button primary rounded small onPress={() => this.makeDecision(true)}>
+                <Text>Yes</Text>
+              </Button>
+            </View> :
           <View style={{ alignItems: 'center', alignSelf: 'center' }}>{
             dialog.decision ?
               <Icon name="checkmark" style={{ color: variables.brandSuccess }} /> :
@@ -45,7 +52,7 @@ export default class Dialog extends Component {
     <View>{
       // TODO: use command list to validate if is command instead of using first char
       // If content is command, show command description
-      this.props.dialog.content[0] === '@' ?
+      commands.find(({syntax}) => this.props.dialog.content.startsWith(`@${syntax}`)) ?
         <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
           <View style={{ flex: 1, flexDirection: 'column' }}>
             <View style={{ alignSelf: 'center', height: 8, zIndex: 100 }}>
@@ -53,7 +60,7 @@ export default class Dialog extends Component {
             </View>
             <View style={{...styles.dialog, ...styles.dialogCenter}}>
                 <Text style={{ backgroundColor: 'transparent', color: variables.textColor, fontSize: 13 }}>
-                  {this.props.dialog.content}
+                  {`${this.props.dialog.senderID} ${this.props.dialog.decided ? ' wants to ' : ' wanted to '} ${commands.find(({syntax}) => this.props.dialog.content.startsWith(`@${syntax}`)).description}`}
                 </Text>
             </View>
           </View>
