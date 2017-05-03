@@ -40,6 +40,15 @@ export function registerUser (form) {
     .catch(err => console.error(err))
 }
 
+export async function fetchUserProfile (itsc) {
+  let token = await AsyncStorage.getItem('Authorization')
+  return fetch(`${API_URL}/user/${itsc}`, {
+    headers: { Authorization: token }
+  })
+    .then(response => response.json())
+    .catch(err => console.error(err))
+}
+
 // Task
 export async function fetchTasks ({page, status}) {
   let token = await AsyncStorage.getItem('Authorization')
