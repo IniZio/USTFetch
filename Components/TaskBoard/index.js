@@ -30,7 +30,7 @@ export default class TaskBoard extends Component {
 
   refreshTask = () => {
     this.setState({ refreshing: true })
-    fetchTasks().then(tasks => this.setState({ tasks: tasks, refreshing: false }))
+    fetchTasks({page: 0, status: 'PENDING'}).then(tasks => this.setState({ tasks: tasks, refreshing: false }))
   }
   toggleFilter = () => {
     this.setState({ filterVisible: !this.state.filterVisible })
@@ -82,9 +82,9 @@ export default class TaskBoard extends Component {
           )}
           scrollEventThrottle={16} refreshControl={
             <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refreshTask()} />
-          } dataArray={this.state.tasks} renderRow={task => (
+          } dataArray={this.state.tasks.filter(task => task.status === 'PENDING')} renderRow={task => (
             <TaskItem navigation={this.props.navigation} task={task} />
-          )} />
+          )} onEndReached={()=>{}} />
         }</View>
 
         <Animated.View style={{position: 'absolute', left: 0, right: 0, bottom: fabOffset, justifyContent: 'center', alignItems: 'center', height: 50}}>

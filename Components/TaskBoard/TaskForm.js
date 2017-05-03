@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Slider, Modal, TouchableOpacity } from 'react-native'
+import { AsyncStorage, Slider, Modal, TouchableOpacity } from 'react-native'
 import { createTask } from '../../api'
 import {
   Container, Content, Body, View, Header,
@@ -36,15 +36,16 @@ export default class TaskForm extends Component {
   }
 
   submitRequest = () => {
-    createTask({
-      requester_id: 'abc',
+    AsyncStorage.getItem('itsc')
+    .then(itsc => createTask({
+      requester_id: itsc,
       objective: this.state.objective,
       from_where: this.state.fromWhere,
       to_where: this.state.toWhere,
       description: this.state.description,
       cost: this.state.cost,
       tip: this.state.tip
-    })
+    }))
     .then(() => { this.props.closeForm() })
   }
 
