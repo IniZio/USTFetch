@@ -88,18 +88,20 @@ export default class ChatRoom extends Component {
     }
   }
 
-  render = () => (
+  render = () => { var _dialogList ; return (
     <View style={{ flex: 1, backgroundColor: 'white', flexDirection: 'row' }}>
     <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={65} contentContainerStyle={{flex: 1}} style={{flex: 1}}>
       <MenuContext>
+      <ScrollView ref={dialogList => _dialogList = dialogList}>
       <List dataArray={this.state.dialogs} renderRow={dialog => (
         <Dialog dialog={dialog} itsc={this.state.itsc} navigation={this.props.navigation} />
-      )} />
+      )}  onContentSizeChange={() => { _dialogList && _dialogList.scrollToEnd({animated: true})}} scrollEnabled showsVerticalScrollIndicator />
+      </ScrollView>
         <Menu name="numbers" renderer={SlideInMenu} opened={this.state.isMenuOpen}>
           <MenuTrigger />
           <MenuOptions>{
             commands.filter((({syntax}) => `@${syntax}`.startsWith(this.state.dialog.split(' ')[0]))).map(command => (
-              <ListItem key={command.syntax} onPress={() => { this.setState({ dialog: `@${command.syntax}`, isMenuOpen: false }) }} >
+              <ListItem key={command.syntax} onPress={() => { this.setState({ dialog: `@${command.syntax} `, isMenuOpen: false }) }} >
                 <Left style={{ flex: 1 }}><Text>@{command.syntax}</Text></Left>
                 <Body style={{ flex: 2 }}><Text>{command.description}</Text></Body>
               </ListItem>
@@ -122,10 +124,10 @@ export default class ChatRoom extends Component {
           placeholderTextColor={variables.inputColorPlaceholder}
           placeholder="Type @ for magic ;)"
           onChangeText={text => this.listMagic(text)}
-          onSubmitEditing={({nativeEvent}) => this.sendDialog(nativeEvent.text)}
+          onSubmitEditing={({nativeEvent}) => this.submitDialog(nativeEvent.text)}
         />
       </View>
     </KeyboardAvoidingView>
     </View>
-  )
+  )}
 }
