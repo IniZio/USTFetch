@@ -26,12 +26,7 @@ export function loginUser (form) {
 }
 
 export async function logoutUser () {
-  let token = await AsyncStorage.getItem('Authorization')
-  return fetch(`${API_URL}/login`, {
-    method: 'POST',
-    headers: { Authorization: token, ...jsonHeader },
-  })
-    .then(response => response.json())
+  return AsyncStorage.removeItem('Authorization')
     .catch(err => console.error(err))
 }
 
@@ -46,9 +41,10 @@ export function registerUser (form) {
 }
 
 // Task
-export async function fetchTasks (page = 0) {
+export async function fetchTasks ({page, status}) {
   let token = await AsyncStorage.getItem('Authorization')
-  return fetch(`${API_URL}/task?page=${page}`, {
+  console.log()
+  return fetch(`${API_URL}/task?` + (page ? `page=${page}&` : '') + (status ? `status=${status}&` : ''), {
     headers: { Authorization: token, ...jsonHeader }
   })
     .then(response => response.json())
@@ -67,7 +63,7 @@ export async function fetchTaskByID (taskID) {
 export async function fetchChats () {
   let token = await AsyncStorage.getItem('Authorization')
   let itsc = await AsyncStorage.getItem('itsc')
-  return fetch(`${API_URL}/task?rfid=${itsc}`, {
+  return fetch(`${API_URL}/task?rfid=${itsc}&nstatus=COMPLETED`, {
     headers: { Authorization: token, ...jsonHeader }
   })
     .then(response => response.json())
