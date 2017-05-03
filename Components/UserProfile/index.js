@@ -3,7 +3,10 @@ import { Content, Body, View,
          Card, CardItem,
          Icon , Text,
          List, ListItem } from 'native-base'
+import { AsyncStorage } from 'react-native'
 import {Avatar} from 'react-native-material-ui'
+
+import { fetchChats, fetchUserProfile, logoutUser } from '../../api'
 
 import TaskItem from '../TaskBoard/TaskItem'
 import ReviewItem from './ReviewItem'
@@ -42,19 +45,24 @@ export default class UserProfile extends Component {
     })
   }
   state = {
+    itsc: '',
     profile: fakeProfile,
     ongoingTasks: fakeOngoingTasks,
     completedTasks: fakeCompletedTasks,
     reviews: fakeReviews
   }
 
-  componentWillMount () {
-    let userID = this.props.navigation.state.params &&
-                 this.props.navigation.state.params.user.userID
-    let othersProfile = fakeUserBase.filter( user => user.userID === userID )[0]
-    if (othersProfile) {
-      this.setState({ profile: othersProfile })
-    }
+  componentDidMount () {
+    AsyncStorage.getItem('itsc').then(itsc => {
+      this.setState({ itsc })
+      return fetchUserProfile(itsc)
+    })
+    .then(profile => this.setState({ profile }))
+    .then(() => fetchChats(this.state.itsc))
+    .then(tasks => this.setState({
+      ongoingTasks: tasks.filter(task => task.status !== 'COMPLETED').slice(0, 3),
+      completedTasks: tasks.filter(task => task.status === 'COMPLETED').slice(0, 3)
+    }))
   }
 
   render = () => (
@@ -64,10 +72,10 @@ export default class UserProfile extends Component {
           <Body>
             <View style={{ flexDirection: 'row', flex: 1, paddingVertical: 5 }}>
               <View style={{ width: 55 }}>
-                <Avatar text={this.state.profile.userAlias[0]} />
+                <Avatar text={this.state.itsc[0]} />
               </View>
               <View style={{ flexDirection: 'column', flex: 1 }}>
-                <Text>{this.state.profile.fullName}</Text>
+                <Text>{this.state.profile.username}</Text>
                 <View style={{ flexDirection: 'row', flex: 1 }}>
                   {[,...Array(5)].map((x, index) => (
                     <Icon name="ios-star" key={index}
@@ -83,6 +91,10 @@ export default class UserProfile extends Component {
       <View style={{ flex: 1 }}>
       <ListItem itemHeader first><Text>Ongoing Tasks</Text></ListItem>
       <List dataArray={this.state.ongoingTasks} renderRow={task =>
+        <TaskItem navigation={this.props.navigation} task={task} />
+      } />
+      <ListItem itemHeader first><Text>Completed Tasks</Text></ListItem>
+      <List dataArray={this.state.completedTasks} renderRow={task =>
         <TaskItem navigation={this.props.navigation} task={task} />
       } />
       <ListItem itemHeader><Text>Reviews</Text></ListItem>
