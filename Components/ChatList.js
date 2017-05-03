@@ -46,6 +46,7 @@ export default class ChatList extends Component {
   refreshChats = async () => {
     this.setState({ refreshing: true })
     let itsc = await AsyncStorage.getItem('itsc')
+    this.setState({ itsc })
     let chats = await fetchChats()
     if (chats) {
       for (let chat of chats) {
