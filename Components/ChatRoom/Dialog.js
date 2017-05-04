@@ -30,7 +30,7 @@ export default class Dialog extends Component {
 
   commandDialog = dialog => {
     // The sender just waits for response
-    if (!this.state.decided && this.state.isMine) return (
+    if (this.props.dialog.content.startsWith('@') && !this.state.decided && this.state.isMine) return (
       <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
         {!!this.state.decision && <Text>{this.state.decision} ? </Text>}
         <Text note>Waiting for response</Text>
