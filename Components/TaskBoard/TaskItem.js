@@ -13,16 +13,20 @@ import { updateTask } from '../../api'
 import variables from '../../theme/variables/platform'
 
 export default class TaskItem extends Component {
+  state = {
+    itsc: ''
+  }
   fetchTask = async () => {
     const {task} = this.props
     const itsc = await AsyncStorage.getItem('itsc')
+    this.setState({itsc})
     await updateTask(task, { fetcher_id: itsc, status: 'ACCEPTED' })
     // this.props.navigation.navigate('ChatRoom', { receiver: { userID: task.userID, userAlias: task.userAlias, role: 'Requester' }, objective: task.objective })
   }
   render = () => {
     let { task, navigation } = this.props
     return (
-      <ListItem onPress={() => navigation.navigate('TaskDetail', task)} thumbnail>
+      <ListItem onPress={() => navigation.navigate('TaskDetail', {task})} thumbnail>
         <Left>
           <View style={{ height: 45, width: 50 }}>
             <Image style={{ height: 45, width: 50 }} resizeMethod="resize" source={require('../../Fetch.png')} />
@@ -36,7 +40,7 @@ export default class TaskItem extends Component {
           <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('Profile', { user: { userID: task.userID, userAlias: task.userAlias } })}>
           <View style={{ flexDirection: 'row', flex: 1, marginVertical: 2 }}>
             <View style={{ flexDirection: 'row', flex: 1 }}>
-              <Text>{task.userAlias}</Text>
+              <Text>{task.requester_id}</Text>
               <View style={{ flexDirection: 'row', flex: 1, alignSelf: 'flex-end', marginBottom: 2 }}>
                 {[, ...Array(5)].map((x, index) => (
                   <Icon name="ios-star" style={{ fontSize: 15, color: 'orange' }} key={index}/>
@@ -50,13 +54,13 @@ export default class TaskItem extends Component {
         </Body>
         <Right style={{ paddingVertical: 0 }}>
           {
-            task.status === 'PENDING'
+            task.status === 'PENDING' && task.requester_id !== this.state.itsc
             ? <Button transparent block onPress={() => this.fetchTask()}>
               <Text style={{ fontSize: 18, color: variables.brandPrimary}}>Fetch!</Text>
             </Button>
             : <Button transparent block>
-              <Text>{task.status}</Text>
-            </Button>
+                <Text>{task.status}</Text>
+              </Button>
           }
         </Right>
       </ListItem>

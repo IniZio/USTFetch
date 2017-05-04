@@ -23,8 +23,8 @@ const fakeProfile = {
 }
 
 const fakeOngoingTasks = [
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, status: 'MEETUP', tip: 5 },
-  { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, status: 'MEETUP', tip: 5 }
+  // { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, status: 'MEETUP', tip: 5 },
+  // { objective: 'Uniqlo Flannel', deadline: '3 hours left', userAlias: 'yihao', userID: 1, status: 'MEETUP', tip: 5 }
 ]
 
 const fakeCompletedTasks = []

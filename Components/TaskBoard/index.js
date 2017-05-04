@@ -31,15 +31,18 @@ export default class TaskBoard extends Component {
   }
 
   refreshTask = ({step, keyword}) => {
-    this.setState({ refreshing: true, page: this.state.page + step })
-    fetchTasks({page: this.state.page + step, status: 'PENDING', keyword: keyword || this.state.keyword }).then(tasks => {
-      if (Math.abs(step)) {
-        this.setState({ tasks: this.state.tasks.concat(tasks) })
-      } else {
-        this.setState({ tasks })
-      }
-      this.setState({ refreshing: false })
-    })
+    const PAGE_SIZE = 7
+    if (!step || this.state.tasks.length >= PAGE_SIZE) {
+      this.setState({ refreshing: !!step, page: step ? this.state.page + step : 0 })
+      fetchTasks({page: step ? this.state.page + step : 0, status: 'PENDING', keyword: keyword || this.state.keyword }).then(tasks => {
+        if (step && this.state.tasks.length >= 5) {
+          this.setState({ tasks: this.state.tasks.concat(tasks) })
+        } else {
+          this.setState({ tasks })
+        }
+        this.setState({ refreshing: false })
+      })
+    }
   }
   toggleFilter = () => {
     this.setState({ filterVisible: !this.state.filterVisible })
@@ -90,7 +93,7 @@ export default class TaskBoard extends Component {
             [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
           )}
           scrollEventThrottle={16} refreshControl={
-            <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refreshTask({step: 0})} />
+            <RefreshControl refreshing={this.state.refreshing} onRefresh={() => { this.setState({ page: 0 }); this.refreshTask({step: 0}) }} />
           } dataArray={this.state.tasks.filter(task => task.status === 'PENDING')} renderRow={task => (
             <TaskItem navigation={this.props.navigation} task={task} />
           )} onEndReached={()=>{ console.log('end reached'); this.refreshTask({ step: 1 }) }} />
