@@ -26,25 +26,32 @@ export default class LoginForm extends Component {
   }
   state = {
     itsc: '',
-    password: ''
+    password: '',
+    error: ''
   }
 
   submitLogin = () => {
     // IF login fail than try to register, if still fail than that means user used wrong password
-    loginUser({ itsc: this.state.itsc, password: this.state.password }).then(({success, token}) => {
-      if (success) {
-        AsyncStorage.setItem('Authorization', token).then(() => {
-          AsyncStorage.setItem('itsc', this.state.itsc).then(() => this.props.onLogin(token, this.state.itsc))
-        })
-      } else {
-        registerUser({ itsc: this.state.itsc, password: this.state.password }).then(({success, token}) => {
-          if (success) {
-            AsyncStorage.setItem('Authorization', token).then(() => {
-              AsyncStorage.setItem('itsc', this.state.itsc).then(() => this.props.onLogin(token, this.state.itsc))
-            })
-          }
-        })
-      }
+    fetch(`https://api.usthing.xyz/Directory/api.php?itsc=${this.state.itsc}`).then(response => response.json())
+    .then(result => {
+      if (result.success) {
+        this.setState({ error: '' })
+      loginUser({ itsc: this.state.itsc, password: this.state.password }).then(({success, token}) => {
+        if (success) {
+          AsyncStorage.setItem('Authorization', token).then(() => {
+            AsyncStorage.setItem('itsc', this.state.itsc).then(() => this.props.onLogin(token, this.state.itsc))
+          })
+        } else {
+          registerUser({ itsc: this.state.itsc, password: this.state.password }).then(({success, token}) => {
+            if (success) {
+              AsyncStorage.setItem('Authorization', token).then(() => {
+                AsyncStorage.setItem('itsc', this.state.itsc).then(() => this.props.onLogin(token, this.state.itsc))
+              })
+            }
+          })
+        }
+      })
+      } else { this.setState({ error: 'Please enter valid itsc' }) }
     })
   }
 
@@ -62,7 +69,12 @@ export default class LoginForm extends Component {
               </Item>
               <Item>
                 <Input placeholder="Password" onChangeText={password => this.setState({ password })} secureTextEntry />
-              </Item>
+              </Item>{
+                !!this.state.error &&
+                <Item>
+                  <Text style={{ fontSize: 12, color: 'red' }}>{this.state.error}</Text>
+                </Item>
+              }
               <Grid style={{ marginTop: 20 }}>
                 <Col>
                   <Button light transparent>

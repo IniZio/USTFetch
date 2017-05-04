@@ -78,7 +78,7 @@ export default class TaskBoard extends Component {
         <Header searchBar rounded style={{ height: 40, paddingVertical: 5 }}>
           <Item>
             <Icon name="search" />
-            <Input returnKeyType="search" placeholder="Search" onSubmitEditing={({nativeEvent})=>{this.setState({ keyword: nativeEvent.text }); this.refreshTask({ keyword: nativeEvent.text })}} />
+            <Input returnKeyType="search" placeholder="Search" onSubmitEditing={({nativeEvent})=>{this.setState({ refreshing: true, keyword: nativeEvent.text }); this.refreshTask({ keyword: nativeEvent.text })}} />
           </Item>
           <Button iconRight light small style={{ width: 80, marginLeft: 10 }} onPress={() => this.toggleFilter()}>
             <Text>Filter </Text>
