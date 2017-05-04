@@ -21,16 +21,25 @@ export default class TaskBoard extends Component {
     filterVisible: false,
     taskFormVisible: false,
     filters: {},
-    refreshing: false
+    refreshing: false,
+    keyword: '',
+    page: 0
   }
 
   componentDidMount () {
-    this.refreshTask()
+    this.refreshTask({step: 0})
   }
 
-  refreshTask = () => {
-    this.setState({ refreshing: true })
-    fetchTasks({page: 0, status: 'PENDING'}).then(tasks => this.setState({ tasks: tasks, refreshing: false }))
+  refreshTask = ({step, keyword}) => {
+    this.setState({ refreshing: true, page: this.state.page + step })
+    fetchTasks({page: this.state.page + step, status: 'PENDING', keyword: keyword || this.state.keyword }).then(tasks => {
+      if (Math.abs(step)) {
+        this.setState({ tasks: this.state.tasks.concat(tasks) })
+      } else {
+        this.setState({ tasks })
+      }
+      this.setState({ refreshing: false })
+    })
   }
   toggleFilter = () => {
     this.setState({ filterVisible: !this.state.filterVisible })
@@ -66,7 +75,7 @@ export default class TaskBoard extends Component {
         <Header searchBar rounded style={{ height: 40, paddingVertical: 5 }}>
           <Item>
             <Icon name="search" />
-            <Input returnKeyType="search" placeholder="Search" onSubmitEditing={()=>{}} />
+            <Input returnKeyType="search" placeholder="Search" onSubmitEditing={({nativeEvent})=>{this.setState({ keyword: nativeEvent.text }); this.refreshTask({ keyword: nativeEvent.text })}} />
           </Item>
           <Button iconRight light small style={{ width: 80, marginLeft: 10 }} onPress={() => this.toggleFilter()}>
             <Text>Filter </Text>
@@ -81,10 +90,10 @@ export default class TaskBoard extends Component {
             [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
           )}
           scrollEventThrottle={16} refreshControl={
-            <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refreshTask()} />
+            <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refreshTask({step: 0})} />
           } dataArray={this.state.tasks.filter(task => task.status === 'PENDING')} renderRow={task => (
             <TaskItem navigation={this.props.navigation} task={task} />
-          )} onEndReached={()=>{}} />
+          )} onEndReached={()=>{ console.log('end reached'); this.refreshTask({ step: 1 }) }} />
         }</View>
 
         <Animated.View style={{position: 'absolute', left: 0, right: 0, bottom: fabOffset, justifyContent: 'center', alignItems: 'center', height: 50}}>

@@ -6,6 +6,8 @@ import { Avatar } from 'react-native-material-ui'
 import variables from '../../theme/variables/platform'
 import commands from './commands'
 
+import { updateTask } from '../../api'
+
 const exampleDialog = { senderID: 'xxx', content: '@setmtl', decision: '', decided: false }
 
 export default class Dialog extends Component {
@@ -20,30 +22,62 @@ export default class Dialog extends Component {
       decided: true,
       decision: decision
     })
+    if (this.props.dialog.content.startsWith('@complete')) {
+      updateTask({ _id: this.props.task_id }, { status: 'COMPLETED' })
+    }
     this.props.onMadeDecision({ dialogID: this.props.dialog._id, decided: true, decision: decision })
   }
 
   commandDialog = dialog => {
+    // The sender just waits for response
+    if (!this.state.decided && this.state.isMine) return (
+      <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
+        {!!this.state.decision && <Text>{this.state.decision} ? </Text>}
+        <Text note>Waiting for response</Text>
+      </View>
+    )
     switch (dialog.content.slice(1).split(' ')[0]) {
       case 'complete': return (
         !this.state.decided ?
-          this.state.isMine ?
+          <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
+            <Button transparent small onPress={() => this.makeDecision(false)}>
+              <Text>No</Text>
+            </Button>
+            <Button primary rounded small onPress={() => this.makeDecision(true)}>
+              <Text>Yes</Text>
+            </Button>
+          </View> :
+          <View style={{ flex: 1, flexDirection: 'column' }}>
+            <View style={{...styles.dialog, ...styles.dialogCenter, paddingVertical: 0, marginVertical: 0, borderWidth: 1}}>{
+              dialog.decision ?
+                <Icon name="checkmark" style={{ color: variables.brandSuccess }} /> :
+                <Icon name="close" style={{ color: variables.brandDanger }} />
+            }</View>
+          </View>
+      )
+      case 'setmtt':
+      case 'setmtl': return (
+        !this.state.decided ?
+          <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
             <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
-              <Text>Waiting for response</Text>
-            </View> :
+              {!!this.state.decision && <Text>{this.state.decision} ?</Text>}
+            </View>
             <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
-              <Button transparent small onPress={() => this.makeDecision(false)}>
-                <Text>No</Text>
-              </Button>
-              <Button primary rounded small onPress={() => this.makeDecision(true)}>
-                <Text>Yes</Text>
-              </Button>
-            </View> :
-          <View style={{ alignItems: 'center', alignSelf: 'center' }}>{
-            dialog.decision ?
-              <Icon name="checkmark" style={{ color: variables.brandSuccess }} /> :
-              <Icon name="close" style={{ color: variables.brandDanger }} />
-          }</View>
+             <Button transparent small onPress={() => this.makeDecision('')}>
+              <Text>No</Text>
+            </Button>
+            <Button primary rounded small onPress={() => this.makeDecision(dialog.decision)}>
+              <Text>Yes</Text>
+            </Button>
+           </View>
+          </View> :
+          <View style={{ flex: 1, flexDirection: 'column' }}>
+            <View style={{...styles.dialog, ...styles.dialogCenter, paddingVertical: 0, marginVertical: 0, borderWidth: 1}}>{
+              dialog.decision ?
+                <View style={{alignItems: 'center'}}><Text>'{dialog.decision}'</Text><Icon name="checkmark" style={{ color: variables.brandSuccess }} /></View> :
+                <Icon name="close" style={{ color: variables.brandDanger }} />
+            }</View>
+          </View>
       )
     }
   }
@@ -60,7 +94,7 @@ export default class Dialog extends Component {
             </View>
             <View style={{...styles.dialog, ...styles.dialogCenter}}>
                 <Text style={{ backgroundColor: 'transparent', color: variables.textColor, fontSize: 13 }}>
-                  {`${this.props.dialog.senderID} ${this.props.dialog.decided ? ' wants to ' : ' wanted to '} ${commands.find(({syntax}) => this.props.dialog.content.startsWith(`@${syntax}`)).description}`}
+                  {`${this.props.dialog.senderID} ${!this.props.dialog.decided ? ' wants to ' : ' wanted to '} ${commands.find(({syntax}) => this.props.dialog.content.startsWith(`@${syntax}`)).description}`}
                 </Text>
             </View>
           </View>
@@ -97,7 +131,7 @@ export default class Dialog extends Component {
 const styles = {
   // Rows of dialog bubbles
   dialogRow: {
-    marginVertical: 8,
+    marginVertical: 4,
     marginHorizontal: 4,
     flexDirection: 'row',
     alignItems: 'center'

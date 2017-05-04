@@ -50,10 +50,10 @@ export async function fetchUserProfile (itsc) {
 }
 
 // Task
-export async function fetchTasks ({page, status}) {
+export async function fetchTasks ({page, status, rfid, keyword}) {
   let token = await AsyncStorage.getItem('Authorization')
   console.log()
-  return fetch(`${API_URL}/task?` + (page ? `page=${page}&` : '') + (status ? `status=${status}&` : ''), {
+  return fetch(`${API_URL}/task?` + (page ? `page=${page}&` : '') + (status ? `status=${status}&` : '') + (rfid ? `rfid=${rfid}&` : '') + (keyword ? `keyword=${keyword}&` : ''), {
     headers: { Authorization: token, ...jsonHeader }
   })
     .then(response => response.json())

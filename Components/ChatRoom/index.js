@@ -105,7 +105,7 @@ export default class ChatRoom extends Component {
       <MenuContext>
       <ScrollView ref={dialogList => { _dialogList = dialogList }}>
       <List dataArray={this.state.dialogs} renderRow={dialog => (
-        <Dialog key={dialog._id} dialog={dialog} itsc={this.state.itsc} navigation={this.props.navigation} onMadeDecision={update=>this.submitDecision(update)} />
+        <Dialog key={dialog._id} dialog={dialog} task_id={this.props.navigation.state.params.chatID} itsc={this.state.itsc} navigation={this.props.navigation} onMadeDecision={update=>this.submitDecision(update)} />
       )} onContentSizeChange={() => { _dialogList && _dialogList.scrollToEnd({animated: false}) }} scrollEnabled showsVerticalScrollIndicator />
       </ScrollView>
         <Menu name="numbers" renderer={SlideInMenu} opened={this.state.isMenuOpen}>

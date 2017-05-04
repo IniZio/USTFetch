@@ -50,7 +50,7 @@ export default class TaskItem extends Component {
         </Body>
         <Right style={{ paddingVertical: 0 }}>
           {
-            task.status !== 'ACCEPTED'
+            task.status === 'PENDING'
             ? <Button transparent block onPress={() => this.fetchTask()}>
               <Text style={{ fontSize: 18, color: variables.brandPrimary}}>Fetch!</Text>
             </Button>

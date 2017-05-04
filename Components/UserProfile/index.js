@@ -6,7 +6,7 @@ import { Content, Body, View,
 import { AsyncStorage } from 'react-native'
 import {Avatar} from 'react-native-material-ui'
 
-import { fetchChats, fetchUserProfile, logoutUser } from '../../api'
+import { fetchTasks, fetchUserProfile, logoutUser } from '../../api'
 
 import TaskItem from '../TaskBoard/TaskItem'
 import ReviewItem from './ReviewItem'
@@ -58,7 +58,7 @@ export default class UserProfile extends Component {
       return fetchUserProfile(itsc)
     })
     .then(profile => this.setState({ profile }))
-    .then(() => fetchChats(this.state.itsc))
+    .then(() => fetchTasks({ rfid: this.state.itsc }))
     .then(tasks => this.setState({
       ongoingTasks: tasks.filter(task => task.status !== 'COMPLETED').slice(0, 3),
       completedTasks: tasks.filter(task => task.status === 'COMPLETED').slice(0, 3)
@@ -75,11 +75,11 @@ export default class UserProfile extends Component {
                 <Avatar text={this.state.itsc[0]} />
               </View>
               <View style={{ flexDirection: 'column', flex: 1 }}>
-                <Text>{this.state.profile.username}</Text>
+                <Text>{this.state.profile.fullname || this.state.profile.username}</Text>
                 <View style={{ flexDirection: 'row', flex: 1 }}>
                   {[,...Array(5)].map((x, index) => (
                     <Icon name="ios-star" key={index}
-                          style={{ color: (this.state.profile.rating >= index) ? 'orange' : 'grey' }}
+                          style={{ color: ((this.state.profile.rating >= index) ? 'orange' : 'grey') }}
                     />
                   ))}
                 </View>
@@ -93,7 +93,7 @@ export default class UserProfile extends Component {
       <List dataArray={this.state.ongoingTasks} renderRow={task =>
         <TaskItem navigation={this.props.navigation} task={task} />
       } />
-      <ListItem itemHeader first><Text>Completed Tasks</Text></ListItem>
+      <ListItem itemHeader><Text>Completed Tasks</Text></ListItem>
       <List dataArray={this.state.completedTasks} renderRow={task =>
         <TaskItem navigation={this.props.navigation} task={task} />
       } />
