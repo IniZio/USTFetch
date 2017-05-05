@@ -47,6 +47,8 @@ export default class LoginForm extends Component {
               AsyncStorage.setItem('Authorization', token).then(() => {
                 AsyncStorage.setItem('itsc', this.state.itsc).then(() => this.props.onLogin(token, this.state.itsc))
               })
+            } else {
+              this.setState({ error: 'Wrong password' })
             }
           })
         }
