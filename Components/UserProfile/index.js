@@ -60,7 +60,7 @@ export default class UserProfile extends Component {
     .then(profile => this.setState({ profile }))
     .then(() => fetchTasks({ rfid: this.state.itsc }))
     .then(tasks => this.setState({
-      ongoingTasks: tasks.filter(task => task.status !== 'COMPLETED').slice(0, 3),
+      ongoingTasks: tasks.filter(task => task.status === 'ACCEPTED').slice(0, 3),
       completedTasks: tasks.filter(task => task.status === 'COMPLETED').slice(0, 3)
     }))
   }
