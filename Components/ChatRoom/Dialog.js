@@ -22,7 +22,7 @@ export default class Dialog extends Component {
       decided: true,
       decision: decision
     })
-    if (this.props.dialog.content.startsWith('@complete')) {
+    if (!!this.props.dialog.content && this.props.dialog.content.startsWith('@complete')) {
       updateTask({ _id: this.props.task_id }, { status: 'COMPLETED' })
     }
     this.props.onMadeDecision({ dialogID: this.props.dialog._id, decided: true, decision: decision })
@@ -30,7 +30,7 @@ export default class Dialog extends Component {
 
   commandDialog = dialog => {
     // The sender just waits for response
-    if (this.props.dialog.content.startsWith('@') && !this.state.decided && this.state.isMine) return (
+    if (!!this.props.dialog.content && this.props.dialog.content.startsWith('@') && !this.state.decided && this.state.isMine) return (
       <View style={{...styles.dialogRow, ...styles.dialogRowCenter}}>
         {!!this.state.decision && <Text>{this.state.decision} ? </Text>}
         <Text note>Waiting for response</Text>
@@ -94,7 +94,7 @@ export default class Dialog extends Component {
             </View>
             <View style={{...styles.dialog, ...styles.dialogCenter}}>
                 <Text style={{ backgroundColor: 'transparent', color: variables.textColor, fontSize: 13 }}>
-                  {`${this.props.dialog.senderID} ${!this.props.dialog.decided ? ' wants to ' : ' wanted to '} ${commands.find(({syntax}) => this.props.dialog.content.startsWith(`@${syntax}`)).description}`}
+                  {`${this.props.dialog.senderID} ${!this.props.dialog.decided ? ' wants to ' : ' wanted to '} ${commands.find(({syntax}) => !!this.props.dialog.content && this.props.dialog.content.startsWith(`@${syntax}`)).description}`}
                 </Text>
             </View>
           </View>

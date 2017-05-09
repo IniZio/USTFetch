@@ -2,8 +2,8 @@ import React from 'react'
 import { AsyncStorage } from 'react-native'
 import io from 'socket.io-client'
 
-const SERVER_URL = 'http://192.168.31.144'
-// const SERVER_URL = 'http://10.89.80.125'
+// const SERVER_URL = 'http://192.168.31.144'
+const SERVER_URL = 'http://10.89.80.125'
 // const SERVER_URL = 'http://10.89.151.157'
 
 export const SOCKET_URL = `${SERVER_URL}:8081`

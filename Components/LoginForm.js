@@ -45,7 +45,7 @@ export default class LoginForm extends Component {
           registerUser({ itsc: this.state.itsc, password: this.state.password }).then(({success, token}) => {
             if (success) {
               AsyncStorage.setItem('Authorization', token).then(() => {
-                AsyncStorage.setItem('fresh', true)
+                // AsyncStorage.setItem('fresh', true)
                 AsyncStorage.setItem('itsc', this.state.itsc).then(() => this.props.onLogin(token, this.state.itsc))
               })
             } else {
