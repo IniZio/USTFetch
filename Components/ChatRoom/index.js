@@ -57,6 +57,7 @@ export default class ChatRoom extends Component {
     })
     // NOTE: not sure if works, React might not react to the change
     this.socket.on('made decision', ({ chatID, dialogID, dialog }) => {
+      console.log(dialog)
       let newDialogs = this.state.dialogs.map(oldDialog => {
         if (oldDialog._id === dialogID) return dialog
         else return oldDialog
