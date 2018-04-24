@@ -1,5 +1,5 @@
-# USTFetch
-:meat_on_bone: HKUST Delivery APP
+# :meat_on_bone: USTFetch
+HKUST Delivery APP
 
 ## Demo:
 https://www.youtube.com/watch?v=cTqNM9W9eps
