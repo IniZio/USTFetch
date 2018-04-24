@@ -1,7 +1,8 @@
-# [Abandoned] USTFetch
-HKUST-oriented Peer-to-Peer delivery network
+# USTFetch
+:meat_on_bone: HKUST Delivery APP
 
-
+## Demo:
+https://www.youtube.com/watch?v=cTqNM9W9eps
 
 ### Installation instructions:
 
